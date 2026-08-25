@@ -122,6 +122,11 @@ footer{text-align:center;color:var(--muted);padding:20px}
 .topic-desc p{margin:14px 0 0}
 .topic-desc p+p{padding-top:12px;border-top:1px dashed #dce7f1}
 .topic-desc strong{color:#174f7a;font-size:.82rem;letter-spacing:.045em;text-transform:uppercase}
+.module-training-link{
+  display:inline-flex;align-items:center;gap:8px;margin:18px 0 2px;padding:11px 16px;border-radius:10px;
+  background:var(--brand);color:#fff;text-decoration:none;font-weight:700;box-shadow:0 5px 14px rgba(23,79,122,.18)
+}
+.module-training-link:hover{background:var(--brand2)}
 </style>
 </head>
 <body>
@@ -129,11 +134,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 <div class="hero-inner">
 <div class="eyebrow">Python-first • React when useful • Production focused</div>
 <h1>AI Engineering Course Map</h1>
-<p>
-      A practical learning roadmap for an experienced software engineer with a machine-learning background.
-      The course combines concepts, hands-on experimentation, mini projects, architecture decisions,
-      evaluation, security, and production deployment.
-    </p>
+<p>A practical learning roadmap for an experienced software engineer with a machine-learning background. The revised sequence introduces agents, agentic systems, and MCP before the deeper RAG modules, making retrieval one capability within a broader AI-system architecture.</p>
 <div class="hero-grid">
 <div class="stat"><strong>14</strong>course modules</div>
 <div class="stat"><strong>180+</strong>clickable concepts</div>
@@ -151,16 +152,28 @@ footer{text-align:center;color:var(--muted);padding:20px}
 <div class="layout">
 <aside class="sidebar">
 <h2>Course modules</h2>
-<a href="#module-00">00 · AI Landscape</a><a href="#module-01">01 · Running LLMs</a><a href="#module-02">02 · Prompt Engineering</a><a href="#module-03">03 · Embeddings and Vector Databases</a><a href="#module-04">04 · Retrieval-Augmented Generation</a><a href="#module-05">05 · Advanced RAG</a><a href="#module-06">06 · Database RAG</a><a href="#module-07">07 · Agentic RAG</a><a href="#module-08">08 · AI Agents</a><a href="#module-09">09 · Agentic Systems</a><a href="#module-10">10 · Model Context Protocol</a><a href="#module-11">11 · AI Evaluation</a><a href="#module-12">12 · Production AI Systems</a><a href="#module-13">13 · Capstone Project</a>
-</aside>
+
+<a href="#module-00">00 · AI Landscape</a><a href="#module-01">01 · Running LLMs</a><a href="#module-02">02 · Prompt Engineering</a><a href="#module-03">03 · AI Agents</a><a href="#module-04">04 · Agentic Systems</a><a href="#module-05">05 · Model Context Protocol</a><a href="#module-06">06 · Embeddings and Vector Databases</a><a href="#module-07">07 · Retrieval-Augmented Generation</a><a href="#module-08">08 · Advanced RAG</a><a href="#module-09">09 · Database RAG</a><a href="#module-10">10 · Agentic RAG</a><a href="#module-11">11 · AI Evaluation</a><a href="#module-12">12 · Production AI Systems</a><a href="#module-13">13 · Capstone Project</a></aside>
 <main class="main">
 <section class="intro-card">
 <h2>Recommended learning order</h2>
-<p>This sequence moves from foundations to model access, retrieval, agents, evaluation, production engineering, and the final capstone.</p>
-<div class="path">
-<div class="path-item"><strong>01</strong><br/>AI fundamentals and the modern AI landscape</div><div class="path-item"><strong>02</strong><br/>Tokens, embeddings, context, and inference</div><div class="path-item"><strong>03</strong><br/>Running LLMs with OpenAI, Ollama, Hugging Face, LiteLLM, and LangChain</div><div class="path-item"><strong>04</strong><br/>Prompt engineering and structured outputs</div><div class="path-item"><strong>05</strong><br/>Embeddings and vector databases</div><div class="path-item"><strong>06</strong><br/>Basic RAG</div><div class="path-item"><strong>07</strong><br/>Advanced RAG</div><div class="path-item"><strong>08</strong><br/>Database RAG</div><div class="path-item"><strong>09</strong><br/>AI agents</div><div class="path-item"><strong>10</strong><br/>Agentic RAG</div><div class="path-item"><strong>11</strong><br/>Agentic systems</div><div class="path-item"><strong>12</strong><br/>Model Context Protocol</div><div class="path-item"><strong>13</strong><br/>AI evaluation</div><div class="path-item"><strong>14</strong><br/>Production AI engineering</div><div class="path-item"><strong>15</strong><br/>Capstone project</div>
-</div>
+<p>This sequence moves from foundations into agents, agentic systems, and MCP first. It then introduces embeddings and RAG as capabilities that agents can use, before covering evaluation, production engineering, and the final capstone.</p>
+<div class="path"><div class="path-item"><strong>01</strong><br/>AI fundamentals and the modern AI landscape</div><div class="path-item"><strong>02</strong><br/>Tokens, context, inference, and the main ways to run LLMs</div><div class="path-item"><strong>03</strong><br/>Prompt engineering, structured outputs, and tool calling</div><div class="path-item"><strong>04</strong><br/>AI agents: tools, state, memory, planning, and execution loops</div><div class="path-item"><strong>05</strong><br/>Agentic systems: orchestration, specialised roles, and graph workflows</div><div class="path-item"><strong>06</strong><br/>Model Context Protocol for connecting agents to tools and resources</div><div class="path-item"><strong>07</strong><br/>Embeddings and vector databases</div><div class="path-item"><strong>08</strong><br/>Basic retrieval-augmented generation</div><div class="path-item"><strong>09</strong><br/>Advanced RAG and retrieval optimisation</div><div class="path-item"><strong>10</strong><br/>Database RAG and safe natural-language access to structured data</div><div class="path-item"><strong>11</strong><br/>Agentic RAG with iterative retrieval, verification, and planning</div><div class="path-item"><strong>12</strong><br/>AI evaluation and regression testing</div><div class="path-item"><strong>13</strong><br/>Production AI engineering</div><div class="path-item"><strong>14</strong><br/>Capstone project</div></div>
 </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <section class="module open" id="module-00">
 <button class="module-header" onclick="toggleModule(this)">
 <div class="module-number">00</div>
@@ -294,8 +307,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Build a searchable reference application that explains AI engineering terms, shows their relationships, and links each concept to practical examples.</p></div>
 </div>
-</div></div></section>
-<section class="module" id="module-01">
+</div></div></section><section class="module" id="module-01">
 <button class="module-header" onclick="toggleModule(this)">
 <div class="module-number">01</div>
 <div>
@@ -565,8 +577,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how universal llm playground affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Build a Python backend and React frontend supporting provider selection, model selection, streaming, conversation history, system prompts, generation settings, and token statistics.</p></div>
 </div>
-</div></div></section>
-<section class="module" id="module-02">
+</div></div></section><section class="module" id="module-02">
 <button class="module-header" onclick="toggleModule(this)">
 <div class="module-number">02</div>
 <div>
@@ -669,628 +680,9 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how prompt optimisation playground affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Build a tool that stores prompt versions, runs them against test cases, compares outputs, and records quality metrics.</p></div>
 </div>
-</div></div></section>
-<section class="module" id="module-03">
+</div></div></section><section class="module" id="module-03">
 <button class="module-header" onclick="toggleModule(this)">
 <div class="module-number">03</div>
-<div>
-<h2>Embeddings and Vector Databases</h2>
-<p>Understand semantic representation and build the retrieval foundation used by most RAG systems.</p>
-</div>
-<div class="chevron">⌄</div>
-</button>
-<div class="module-body">
-<div class="section"><h3>Core concepts</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Embedding models</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — An embedding model maps an input such as a sentence, paragraph, or code fragment to a dense numerical vector. Inputs with related meanings tend to occupy nearby regions of the vector space, allowing software to compare semantic similarity without requiring exact keyword matches.</p><p><strong>What this section achieves</strong> — Convert text, code, images, or other content into vectors that preserve semantic relationships.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Vector dimensions</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Vector dimensions is a key concept within the Embeddings and Vector Databases module. In practice, it describes vector size, model architecture, storage impact, and compatibility constraints.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Understand vector size, model architecture, storage impact, and compatibility constraints.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Cosine similarity</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Cosine similarity compares the angle between two vectors rather than their absolute magnitude. Values closer to one generally indicate more similar directions, making it a common metric for embedding search when vectors are normalised. The chosen similarity metric must match how the embedding model was trained and how the index is configured.</p><p><strong>What this section achieves</strong> — Measure directional similarity between vectors and understand why it is widely used for semantic retrieval.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Dot product and distance</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Dot product and distance is a key concept within the Embeddings and Vector Databases module. In practice, it describes other similarity measures and recognise when index configuration must match the embedding model.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Compare other similarity measures and recognise when index configuration must match the embedding model.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Semantic search</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Semantic search retrieves content according to meaning rather than literal term overlap. A query and candidate documents are embedded into the same vector space, then nearest-neighbour search identifies semantically related items. It performs well for paraphrases and conceptual matches but can miss exact identifiers or rare domain terms.</p><p><strong>What this section achieves</strong> — Retrieve content based on meaning rather than exact keyword overlap.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Approximate nearest neighbours</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Approximate nearest-neighbour indexes avoid comparing a query with every stored vector. Structures such as graph or inverted-file indexes search a smaller candidate set, providing much lower latency at scale while accepting a tunable chance of missing the exact nearest items.</p><p><strong>What this section achieves</strong> — Understand how indexes trade a small amount of recall for dramatically faster search at scale.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Metadata filtering</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Metadata filtering is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Combine semantic similarity with exact filters such as tenant, author, date, access level, or document type.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Embedding quality</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Embedding quality is a measurable quality dimension used to determine whether the system behaves as intended. A useful evaluation defines the unit being measured, a representative dataset, a scoring method, acceptable thresholds, and a process for investigating failures rather than relying on anecdotal examples.</p><p><strong>What this section achieves</strong> — Evaluate whether an embedding model represents your domain, language, and document types effectively.</p></div>
-</div>
-</div><div class="section"><h3>Vector database options</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>FAISS</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — FAISS is a key concept within the Embeddings and Vector Databases module. In practice, it describes an efficient local vector index library for experiments, offline applications, and custom retrieval services.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Use an efficient local vector index library for experiments, offline applications, and custom retrieval services.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Chroma</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Chroma is a key concept within the Embeddings and Vector Databases module. In practice, it describes a developer-friendly embedded vector store for prototypes and smaller applications.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Use a developer-friendly embedded vector store for prototypes and smaller applications.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>pgvector</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — pgvector is a key concept within the Embeddings and Vector Databases module. In practice, it describes add vector search to PostgreSQL and combine it with relational data, transactions, security, and familiar operational tooling.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Add vector search to PostgreSQL and combine it with relational data, transactions, security, and familiar operational tooling.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Qdrant</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Qdrant is a key concept within the Embeddings and Vector Databases module. In practice, it describes a purpose-built vector database with rich filtering, scalable search, and a production-ready API.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Use a purpose-built vector database with rich filtering, scalable search, and a production-ready API.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Milvus</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Milvus is a key concept within the Embeddings and Vector Databases module. In practice, it describes a distributed vector database designed for high-scale vector workloads.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Explore a distributed vector database designed for high-scale vector workloads.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Selection criteria</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Selection criteria is a key concept within the Embeddings and Vector Databases module. In practice, it describes operational complexity, scalability, filtering, persistence, multi-tenancy, backup, cost, and ecosystem support.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Compare operational complexity, scalability, filtering, persistence, multi-tenancy, backup, cost, and ecosystem support.</p></div>
-</div>
-</div><div class="section"><h3>Playground and experiments</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Visualising embeddings</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Visualising embeddings is a key concept within the Embeddings and Vector Databases module. In practice, it describes project embeddings into two dimensions to inspect clusters and relationships.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Project embeddings into two dimensions to inspect clusters and relationships.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Similarity inspection</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how similarity inspection affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Compare semantically similar, unrelated, and misleadingly similar text.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Model comparison</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Evaluate multiple embedding models using a domain-specific retrieval dataset.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Index comparison</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Measure recall, latency, and storage across flat and approximate indexes.</p></div>
-</div>
-</div><div class="section"><h3>Mini project</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Semantic search engine</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Build a Python service that indexes documents, applies metadata filters, ranks semantic matches, and exposes a simple React search interface.</p></div>
-</div>
-</div></div></section>
-<section class="module" id="module-04">
-<button class="module-header" onclick="toggleModule(this)">
-<div class="module-number">04</div>
-<div>
-<h2>Retrieval-Augmented Generation</h2>
-<p>Build grounded question-answering systems that retrieve relevant information before asking a model to generate an answer.</p>
-</div>
-<div class="chevron">⌄</div>
-</button>
-<div class="module-body">
-<div class="section"><h3>RAG pipeline</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Document loading</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Document loading is the ingestion boundary of a RAG system. It acquires content from files, object storage, websites, APIs, or repositories and records enough source metadata to support updates, access control, traceability, and later reprocessing.</p><p><strong>What this section achieves</strong> — Ingest PDFs, Office files, Markdown, HTML, plain text, and application-specific content.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Parsing</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Parsing converts source files into a structured representation that preserves useful meaning such as headings, paragraphs, tables, pages, and document hierarchy. Poor parsing can destroy relationships before retrieval begins, so RAG quality often depends as much on document understanding as on the model itself.</p><p><strong>What this section achieves</strong> — Extract useful text and structure while preserving headings, tables, page references, and metadata.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Chunking</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Chunking divides parsed content into units that can be embedded and retrieved. Chunks must be small enough to target precise evidence but large enough to preserve meaning, and the best strategy often follows document structure rather than using a fixed character count everywhere.</p><p><strong>What this section achieves</strong> — Split content into retrieval units that balance semantic completeness, precision, and context size.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Metadata</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Metadata is a key concept within the Retrieval-Augmented Generation module. In practice, it describes attach document, page, section, owner, timestamp, source, and access-control information.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Attach document, page, section, owner, timestamp, source, and access-control information.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Embedding</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Embedding is a key concept within the Retrieval-Augmented Generation module. In practice, it describes vectors for chunks using a model appropriate for the language and domain.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Create vectors for chunks using a model appropriate for the language and domain.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Indexing</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Indexing is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Store vectors and metadata in a searchable index.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Query embedding</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Query embedding is a key concept within the Retrieval-Augmented Generation module. In practice, it describes a user's question in the same vector space as the documents.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Represent a user's question in the same vector space as the documents.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Retrieval</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Retrieval selects the evidence most likely to answer a query before generation occurs. It may combine vector similarity, keyword ranking, filters, graph relationships, or database queries. Retrieval quality places an upper bound on answer quality because the generator cannot reliably ground itself in evidence it never receives.</p><p><strong>What this section achieves</strong> — Select relevant chunks using semantic, keyword, or hybrid methods.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Context construction</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Context construction turns retrieved items into the evidence section of a model request. It must order useful passages, remove duplicates, preserve citations, respect token budgets, and clearly distinguish source content from trusted instructions.</p><p><strong>What this section achieves</strong> — Assemble retrieved evidence into a prompt while managing ordering, duplication, and token limits.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Answer generation</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — In the generation stage, the LLM synthesises a response from the user request and retrieved evidence. Grounding instructions, citation formats, uncertainty handling, and output schemas shape how faithfully the model uses that evidence, but they cannot fully compensate for poor retrieval.</p><p><strong>What this section achieves</strong> — Ask the LLM to answer using retrieved evidence and explicit grounding instructions.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Citations</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Citations connect generated claims to the source passages used to support them. A trustworthy RAG system preserves source identifiers during ingestion and retrieval, then returns references precise enough for users to inspect the original page, section, record, or URL.</p><p><strong>What this section achieves</strong> — Return source references so users can inspect the evidence behind an answer.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Evaluation</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Evaluation is a measurable quality dimension used to determine whether the system behaves as intended. A useful evaluation defines the unit being measured, a representative dataset, a scoring method, acceptable thresholds, and a process for investigating failures rather than relying on anecdotal examples.</p><p><strong>What this section achieves</strong> — Measure retrieval quality, faithfulness, answer relevance, citation accuracy, latency, and cost.</p></div>
-</div>
-</div><div class="section"><h3>Playground and experiments</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Chunk-size comparison</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Compare small, medium, and large chunks for retrieval precision and answer quality.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Chunk overlap</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Chunk overlap is a key concept within the Retrieval-Augmented Generation module. In practice, it describes whether overlapping chunks preserve context or merely increase duplication.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Measure whether overlapping chunks preserve context or merely increase duplication.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Embedding comparison</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Test multiple models on the same document corpus.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Top-k retrieval</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Top-k retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Observe how retrieving too few or too many chunks affects answers.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Prompt grounding</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Prompt grounding concerns the instruction and context layer through which an application communicates intent to a language model. Prompt design influences behaviour but remains probabilistic, so robust implementations pair clear instructions with schemas, validation, tests, and deterministic controls.</p><p><strong>What this section achieves</strong> — Compare weak and strict instructions for using only retrieved evidence.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Failure analysis</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how failure analysis affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Inspect cases where the answer is wrong because retrieval, ranking, context, or generation failed.</p></div>
-</div>
-</div><div class="section"><h3>Mini projects</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>PDF chatbot</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — PDF chatbot is a key concept within the Retrieval-Augmented Generation module. In practice, it describes a conversational assistant that answers questions from uploaded PDFs and cites pages.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Build a conversational assistant that answers questions from uploaded PDFs and cites pages.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Personal knowledge base</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Personal knowledge base is a key concept within the Retrieval-Augmented Generation module. In practice, it describes index notes, technical documents, and reference material into a searchable assistant.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Index notes, technical documents, and reference material into a searchable assistant.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Company wiki assistant</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Build a multi-user knowledge assistant with access controls and source citations.</p></div>
-</div>
-</div></div></section>
-<section class="module" id="module-05">
-<button class="module-header" onclick="toggleModule(this)">
-<div class="module-number">05</div>
-<div>
-<h2>Advanced RAG</h2>
-<p>Improve retrieval quality, robustness, and scalability using more sophisticated search and context-management techniques.</p>
-</div>
-<div class="chevron">⌄</div>
-</button>
-<div class="module-body">
-<div class="section"><h3>Core techniques</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Hybrid search</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Hybrid search combines lexical retrieval, which excels at exact words and identifiers, with vector retrieval, which excels at semantic similarity. Scores are fused or candidate sets are merged so the system benefits from both approaches rather than relying on a single retrieval signal.</p><p><strong>What this section achieves</strong> — Combine semantic vector retrieval with lexical search such as BM25 to capture both meaning and exact terms.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>BM25</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — BM25 is a probabilistic ranking function used in traditional information retrieval. It rewards documents containing important query terms while normalising for document length and term frequency, making it particularly effective for names, codes, acronyms, and rare technical vocabulary.</p><p><strong>What this section achieves</strong> — Understand classic keyword ranking and why it remains valuable for identifiers, names, codes, and specialised terminology.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Reranking</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Reranking uses a more accurate but slower model to score a small set of candidates returned by the first-stage retriever. Because the reranker jointly considers the query and each passage, it can improve ordering and relevance without applying an expensive model to the entire corpus.</p><p><strong>What this section achieves</strong> — Use a stronger model to reorder candidate passages after fast initial retrieval.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Query rewriting</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Query rewriting transforms a user’s conversational or underspecified question into one or more search-oriented queries. It can add missing context, resolve references, or generate domain terminology, but the rewritten query must preserve the original intent rather than invent assumptions.</p><p><strong>What this section achieves</strong> — Transform unclear or conversational questions into retrieval-friendly queries.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Multi-query retrieval</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Multi-query retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Generate several alternative searches to improve recall for ambiguous or complex questions.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Parent-child retrieval</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Parent-child retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Search small child chunks for precision while returning larger parent sections for context.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Context compression</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Context compression is a key concept within the Advanced RAG module. In practice, it describes extract only the relevant parts of retrieved documents before sending them to the LLM.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Extract only the relevant parts of retrieved documents before sending them to the LLM.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Metadata filtering</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Metadata filtering is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Restrict retrieval using document type, user permissions, project, date, source, or domain.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Deduplication</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Deduplication is a key concept within the Advanced RAG module. In practice, it describes remove repeated or near-identical evidence from the final context.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Remove repeated or near-identical evidence from the final context.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Recency weighting</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Recency weighting is a key concept within the Advanced RAG module. In practice, it describes prefer current information when freshness matters.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Prefer current information when freshness matters.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Domain-aware retrieval</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Domain-aware retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Adjust chunking, models, ranking, and filters for legal, scientific, technical, or business content.</p></div>
-</div>
-</div><div class="section"><h3>Playground and experiments</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Hybrid versus vector-only</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Compare retrieval quality across semantic, lexical, and combined strategies.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Reranker evaluation</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Reranker evaluation is a measurable quality dimension used to determine whether the system behaves as intended. A useful evaluation defines the unit being measured, a representative dataset, a scoring method, acceptable thresholds, and a process for investigating failures rather than relying on anecdotal examples.</p><p><strong>What this section achieves</strong> — Measure whether reranking improves top results enough to justify extra latency and cost.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Query rewrite analysis</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how query rewrite analysis affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Inspect when rewriting improves retrieval and when it distorts user intent.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Retrieval ablation</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how retrieval ablation affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Disable one component at a time to understand which techniques actually add value.</p></div>
-</div>
-</div><div class="section"><h3>Mini projects</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Legal assistant</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Retrieve clauses, legislation, and supporting documents with precise citations and metadata filters.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Research assistant</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Search across papers and reports, synthesise evidence, and preserve source traceability.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Technical documentation assistant</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Answer product and engineering questions across versioned documentation and code references.</p></div>
-</div>
-</div></div></section>
-<section class="module" id="module-06">
-<button class="module-header" onclick="toggleModule(this)">
-<div class="module-number">06</div>
-<div>
-<h2>Database RAG</h2>
-<p>Enable natural-language access to structured data while maintaining correctness, security, and control.</p>
-</div>
-<div class="chevron">⌄</div>
-</button>
-<div class="module-body">
-<div class="section"><h3>Core topics</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Natural language to SQL</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Text-to-SQL systems translate a natural-language question into an executable database query. The model must connect user vocabulary to schema elements, joins, filters, aggregations, and business definitions, while the application constrains execution to safe, read-only, resource-limited operations.</p><p><strong>What this section achieves</strong> — Translate user questions into database queries while preserving intent and business meaning.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Schema understanding</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Schema understanding gives the model a meaningful representation of tables, columns, relationships, data types, and business definitions. Raw DDL is often insufficient; descriptions, examples, join guidance, and governed metrics can be essential for producing correct analytical queries.</p><p><strong>What this section achieves</strong> — Provide table, column, relationship, type, and business-definition context to the model.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Schema retrieval</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Schema retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Select only the relevant parts of a large schema before generating SQL.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>SQL generation</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — SQL generation connects probabilistic language understanding with structured data systems. The core challenge is to translate user intent into precise operations while preserving schema semantics, access control, validation, resource limits, and traceability.</p><p><strong>What this section achieves</strong> — Create syntactically correct and dialect-specific queries.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>SQL validation</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — SQL validation checks generated queries before they reach the database. A validator can parse the statement, reject writes or prohibited objects, enforce row and time limits, verify tenant filters, and ensure that only approved functions and schemas are used.</p><p><strong>What this section achieves</strong> — Parse or inspect generated SQL before execution to reject unsafe or invalid statements.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Read-only execution</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Read-only execution is a key concept within the Database RAG module. In practice, it describes restricted credentials, transactions, limits, and timeouts to reduce risk.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Use restricted credentials, transactions, limits, and timeouts to reduce risk.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Query repair</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Query repair is a key concept within the Database RAG module. In practice, it describes database errors back into a controlled correction loop.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Feed database errors back into a controlled correction loop.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Result interpretation</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Result interpretation is a key concept within the Database RAG module. In practice, it describes query results into explanations, tables, summaries, and charts.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Convert query results into explanations, tables, summaries, and charts.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Business semantics</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Business semantics is a key concept within the Database RAG module. In practice, it describes user terminology to calculated measures, dimensions, aliases, and domain-specific rules.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Map user terminology to calculated measures, dimensions, aliases, and domain-specific rules.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Database agents</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Database agents represents a responsibility or control pattern within an agentic workflow. It helps separate decision-making, information gathering, execution, and verification so each step can use appropriate tools, permissions, budgets, and evaluation criteria.</p><p><strong>What this section achieves</strong> — Allow a model to inspect schema, run approved queries, and iteratively refine its approach.</p></div>
-</div>
-</div><div class="section"><h3>Database options</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>SQLite</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — SQLite connects probabilistic language understanding with structured data systems. The core challenge is to translate user intent into precise operations while preserving schema semantics, access control, validation, resource limits, and traceability.</p><p><strong>What this section achieves</strong> — Use a lightweight local database for learning and prototypes.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>PostgreSQL</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — PostgreSQL connects probabilistic language understanding with structured data systems. The core challenge is to translate user intent into precise operations while preserving schema semantics, access control, validation, resource limits, and traceability.</p><p><strong>What this section achieves</strong> — Build against a production relational database with roles, views, extensions, and strong operational support.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>DuckDB</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — DuckDB is a key concept within the Database RAG module. In practice, it describes local files and columnar data efficiently using SQL without a separate database server.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Analyse local files and columnar data efficiently using SQL without a separate database server.</p></div>
-</div>
-</div><div class="section"><h3>Playground and experiments</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Simple text-to-SQL</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Simple text-to-SQL connects probabilistic language understanding with structured data systems. The core challenge is to translate user intent into precise operations while preserving schema semantics, access control, validation, resource limits, and traceability.</p><p><strong>What this section achieves</strong> — Generate and execute safe queries against a small sample schema.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Schema-size experiment</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how schema-size experiment affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Observe performance when the model sees the whole schema versus retrieved subsets.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Validation experiment</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how validation experiment affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Test allowlists, query limits, parsing, and read-only credentials.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Ambiguity handling</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Ambiguity handling is a key concept within the Database RAG module. In practice, it describes how the system responds when a business question has multiple valid interpretations.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Explore how the system responds when a business question has multiple valid interpretations.</p></div>
-</div>
-</div><div class="section"><h3>Mini project</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Conversational data analyst</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Conversational data analyst is a key concept within the Database RAG module. In practice, it describes an application that accepts natural-language questions, generates validated SQL, executes it safely, and explains the result.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Build an application that accepts natural-language questions, generates validated SQL, executes it safely, and explains the result.</p></div>
-</div>
-</div></div></section>
-<section class="module" id="module-07">
-<button class="module-header" onclick="toggleModule(this)">
-<div class="module-number">07</div>
-<div>
-<h2>Agentic RAG</h2>
-<p>Combine retrieval with planning and iterative decision-making so the system can search, inspect, refine, and verify before answering.</p>
-</div>
-<div class="chevron">⌄</div>
-</button>
-<div class="module-body">
-<div class="section"><h3>Core topics</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Retrieval planning</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Retrieval planning is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Let the system decide what information is needed rather than issuing one fixed search.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Search iteration</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Search iteration is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Perform multiple retrieval steps when the first results are incomplete.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Query decomposition</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Query decomposition is a key concept within the Agentic RAG module. In practice, it describes break multi-part questions into smaller searchable subquestions.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Break multi-part questions into smaller searchable subquestions.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Tool selection</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Tool selection is a key concept within the Agentic RAG module. In practice, it describes between vector search, keyword search, database access, web search, or domain tools.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Choose between vector search, keyword search, database access, web search, or domain tools.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Evidence inspection</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how evidence inspection affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Review retrieved content and decide whether it is sufficient.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Reflection</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Reflection is a key concept within the Agentic RAG module. In practice, it describes missing evidence, contradictions, or weak support before finalising an answer.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Detect missing evidence, contradictions, or weak support before finalising an answer.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Verification</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Verification is a key concept within the Agentic RAG module. In practice, it describes check claims against sources or deterministic tools.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Check claims against sources or deterministic tools.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>State management</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — State management is a key concept within the Agentic RAG module. In practice, it describes the plan, searches, evidence, intermediate conclusions, and completion status.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Track the plan, searches, evidence, intermediate conclusions, and completion status.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Stopping conditions</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Stopping conditions is a key concept within the Agentic RAG module. In practice, it describes prevent endless loops by defining explicit success, failure, and budget limits.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Prevent endless loops by defining explicit success, failure, and budget limits.</p></div>
-</div>
-</div><div class="section"><h3>Playground and experiments</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Single-shot versus iterative RAG</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Compare a fixed retrieval pipeline with an agent that can search repeatedly.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Question decomposition</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Question decomposition is a key concept within the Agentic RAG module. In practice, it describes evaluate whether subquestions improve coverage for complex requests.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Evaluate whether subquestions improve coverage for complex requests.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Verifier loop</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Verifier loop represents a responsibility or control pattern within an agentic workflow. It helps separate decision-making, information gathering, execution, and verification so each step can use appropriate tools, permissions, budgets, and evaluation criteria.</p><p><strong>What this section achieves</strong> — Add a separate verification stage and measure whether unsupported claims decrease.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Budget limits</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — Budget limits is a key concept within the Agentic RAG module. In practice, it describes maximum searches, tokens, latency, and tool calls.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Control maximum searches, tokens, latency, and tool calls.</p></div>
-</div>
-</div><div class="section"><h3>Mini projects</h3>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Research assistant</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Plan and execute multi-step retrieval across documents, databases, and approved external sources.</p></div>
-</div>
-<div class="topic">
-<button class="topic-btn" onclick="toggleTopic(this)">
-<span>Report generator</span><span>＋</span>
-</button>
-<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Gather evidence, organise findings, draft a structured report, and attach citations.</p></div>
-</div>
-</div></div></section>
-<section class="module" id="module-08">
-<button class="module-header" onclick="toggleModule(this)">
-<div class="module-number">08</div>
 <div>
 <h2>AI Agents</h2>
 <p>Understand and build systems that use models to choose actions, call tools, observe outcomes, and work towards a goal.</p>
@@ -1298,6 +690,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 <div class="chevron">⌄</div>
 </button>
 <div class="module-body">
+<a class="module-training-link" href="module-03-ai-agents/index.html">Open Module 03 Training →</a>
 <div class="section"><h3>Core concepts</h3>
 <div class="topic">
 <button class="topic-btn" onclick="toggleTopic(this)">
@@ -1403,10 +796,9 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — Data analyst is a key concept within the AI Agents module. In practice, it describes datasets, run analyses, create summaries, and explain findings.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Choose datasets, run analyses, create summaries, and explain findings.</p></div>
 </div>
-</div></div></section>
-<section class="module" id="module-09">
+</div></div></section><section class="module" id="module-04">
 <button class="module-header" onclick="toggleModule(this)">
-<div class="module-number">09</div>
+<div class="module-number">04</div>
 <div>
 <h2>Agentic Systems</h2>
 <p>Design larger AI applications made of specialised roles, workflows, tools, and coordination mechanisms.</p>
@@ -1531,10 +923,9 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Prepare agendas, retrieve context, summarise discussions, extract decisions, and track actions.</p></div>
 </div>
-</div></div></section>
-<section class="module" id="module-10">
+</div></div></section><section class="module" id="module-05">
 <button class="module-header" onclick="toggleModule(this)">
-<div class="module-number">10</div>
+<div class="module-number">05</div>
 <div>
 <h2>Model Context Protocol</h2>
 <p>Learn a standard way to connect AI applications with external tools, resources, and reusable prompts.</p>
@@ -1672,8 +1063,620 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — Custom MCP server is a key concept within the Model Context Protocol module. In practice, it describes a server for a real developer or business domain, such as repository inspection, technical documents, or a controlled database interface.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Build a server for a real developer or business domain, such as repository inspection, technical documents, or a controlled database interface.</p></div>
 </div>
-</div></div></section>
-<section class="module" id="module-11">
+</div></div></section><section class="module" id="module-06">
+<button class="module-header" onclick="toggleModule(this)">
+<div class="module-number">06</div>
+<div>
+<h2>Embeddings and Vector Databases</h2>
+<p>Understand semantic representation and build the retrieval foundation used by most RAG systems.</p>
+</div>
+<div class="chevron">⌄</div>
+</button>
+<div class="module-body">
+<div class="section"><h3>Core concepts</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Embedding models</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — An embedding model maps an input such as a sentence, paragraph, or code fragment to a dense numerical vector. Inputs with related meanings tend to occupy nearby regions of the vector space, allowing software to compare semantic similarity without requiring exact keyword matches.</p><p><strong>What this section achieves</strong> — Convert text, code, images, or other content into vectors that preserve semantic relationships.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Vector dimensions</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Vector dimensions is a key concept within the Embeddings and Vector Databases module. In practice, it describes vector size, model architecture, storage impact, and compatibility constraints.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Understand vector size, model architecture, storage impact, and compatibility constraints.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Cosine similarity</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Cosine similarity compares the angle between two vectors rather than their absolute magnitude. Values closer to one generally indicate more similar directions, making it a common metric for embedding search when vectors are normalised. The chosen similarity metric must match how the embedding model was trained and how the index is configured.</p><p><strong>What this section achieves</strong> — Measure directional similarity between vectors and understand why it is widely used for semantic retrieval.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Dot product and distance</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Dot product and distance is a key concept within the Embeddings and Vector Databases module. In practice, it describes other similarity measures and recognise when index configuration must match the embedding model.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Compare other similarity measures and recognise when index configuration must match the embedding model.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Semantic search</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Semantic search retrieves content according to meaning rather than literal term overlap. A query and candidate documents are embedded into the same vector space, then nearest-neighbour search identifies semantically related items. It performs well for paraphrases and conceptual matches but can miss exact identifiers or rare domain terms.</p><p><strong>What this section achieves</strong> — Retrieve content based on meaning rather than exact keyword overlap.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Approximate nearest neighbours</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Approximate nearest-neighbour indexes avoid comparing a query with every stored vector. Structures such as graph or inverted-file indexes search a smaller candidate set, providing much lower latency at scale while accepting a tunable chance of missing the exact nearest items.</p><p><strong>What this section achieves</strong> — Understand how indexes trade a small amount of recall for dramatically faster search at scale.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Metadata filtering</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Metadata filtering is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Combine semantic similarity with exact filters such as tenant, author, date, access level, or document type.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Embedding quality</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Embedding quality is a measurable quality dimension used to determine whether the system behaves as intended. A useful evaluation defines the unit being measured, a representative dataset, a scoring method, acceptable thresholds, and a process for investigating failures rather than relying on anecdotal examples.</p><p><strong>What this section achieves</strong> — Evaluate whether an embedding model represents your domain, language, and document types effectively.</p></div>
+</div>
+</div><div class="section"><h3>Vector database options</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>FAISS</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — FAISS is a key concept within the Embeddings and Vector Databases module. In practice, it describes an efficient local vector index library for experiments, offline applications, and custom retrieval services.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Use an efficient local vector index library for experiments, offline applications, and custom retrieval services.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Chroma</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Chroma is a key concept within the Embeddings and Vector Databases module. In practice, it describes a developer-friendly embedded vector store for prototypes and smaller applications.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Use a developer-friendly embedded vector store for prototypes and smaller applications.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>pgvector</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — pgvector is a key concept within the Embeddings and Vector Databases module. In practice, it describes add vector search to PostgreSQL and combine it with relational data, transactions, security, and familiar operational tooling.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Add vector search to PostgreSQL and combine it with relational data, transactions, security, and familiar operational tooling.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Qdrant</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Qdrant is a key concept within the Embeddings and Vector Databases module. In practice, it describes a purpose-built vector database with rich filtering, scalable search, and a production-ready API.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Use a purpose-built vector database with rich filtering, scalable search, and a production-ready API.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Milvus</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Milvus is a key concept within the Embeddings and Vector Databases module. In practice, it describes a distributed vector database designed for high-scale vector workloads.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Explore a distributed vector database designed for high-scale vector workloads.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Selection criteria</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Selection criteria is a key concept within the Embeddings and Vector Databases module. In practice, it describes operational complexity, scalability, filtering, persistence, multi-tenancy, backup, cost, and ecosystem support.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Compare operational complexity, scalability, filtering, persistence, multi-tenancy, backup, cost, and ecosystem support.</p></div>
+</div>
+</div><div class="section"><h3>Playground and experiments</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Visualising embeddings</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Visualising embeddings is a key concept within the Embeddings and Vector Databases module. In practice, it describes project embeddings into two dimensions to inspect clusters and relationships.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Project embeddings into two dimensions to inspect clusters and relationships.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Similarity inspection</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how similarity inspection affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Compare semantically similar, unrelated, and misleadingly similar text.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Model comparison</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Evaluate multiple embedding models using a domain-specific retrieval dataset.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Index comparison</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Measure recall, latency, and storage across flat and approximate indexes.</p></div>
+</div>
+</div><div class="section"><h3>Mini project</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Semantic search engine</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Build a Python service that indexes documents, applies metadata filters, ranks semantic matches, and exposes a simple React search interface.</p></div>
+</div>
+</div></div></section><section class="module" id="module-07">
+<button class="module-header" onclick="toggleModule(this)">
+<div class="module-number">07</div>
+<div>
+<h2>Retrieval-Augmented Generation</h2>
+<p>Build grounded question-answering systems that retrieve relevant information before asking a model to generate an answer.</p>
+</div>
+<div class="chevron">⌄</div>
+</button>
+<div class="module-body">
+<div class="section"><h3>RAG pipeline</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Document loading</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Document loading is the ingestion boundary of a RAG system. It acquires content from files, object storage, websites, APIs, or repositories and records enough source metadata to support updates, access control, traceability, and later reprocessing.</p><p><strong>What this section achieves</strong> — Ingest PDFs, Office files, Markdown, HTML, plain text, and application-specific content.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Parsing</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Parsing converts source files into a structured representation that preserves useful meaning such as headings, paragraphs, tables, pages, and document hierarchy. Poor parsing can destroy relationships before retrieval begins, so RAG quality often depends as much on document understanding as on the model itself.</p><p><strong>What this section achieves</strong> — Extract useful text and structure while preserving headings, tables, page references, and metadata.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Chunking</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Chunking divides parsed content into units that can be embedded and retrieved. Chunks must be small enough to target precise evidence but large enough to preserve meaning, and the best strategy often follows document structure rather than using a fixed character count everywhere.</p><p><strong>What this section achieves</strong> — Split content into retrieval units that balance semantic completeness, precision, and context size.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Metadata</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Metadata is a key concept within the Retrieval-Augmented Generation module. In practice, it describes attach document, page, section, owner, timestamp, source, and access-control information.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Attach document, page, section, owner, timestamp, source, and access-control information.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Embedding</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Embedding is a key concept within the Retrieval-Augmented Generation module. In practice, it describes vectors for chunks using a model appropriate for the language and domain.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Create vectors for chunks using a model appropriate for the language and domain.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Indexing</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Indexing is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Store vectors and metadata in a searchable index.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Query embedding</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Query embedding is a key concept within the Retrieval-Augmented Generation module. In practice, it describes a user's question in the same vector space as the documents.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Represent a user's question in the same vector space as the documents.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Retrieval</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Retrieval selects the evidence most likely to answer a query before generation occurs. It may combine vector similarity, keyword ranking, filters, graph relationships, or database queries. Retrieval quality places an upper bound on answer quality because the generator cannot reliably ground itself in evidence it never receives.</p><p><strong>What this section achieves</strong> — Select relevant chunks using semantic, keyword, or hybrid methods.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Context construction</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Context construction turns retrieved items into the evidence section of a model request. It must order useful passages, remove duplicates, preserve citations, respect token budgets, and clearly distinguish source content from trusted instructions.</p><p><strong>What this section achieves</strong> — Assemble retrieved evidence into a prompt while managing ordering, duplication, and token limits.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Answer generation</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — In the generation stage, the LLM synthesises a response from the user request and retrieved evidence. Grounding instructions, citation formats, uncertainty handling, and output schemas shape how faithfully the model uses that evidence, but they cannot fully compensate for poor retrieval.</p><p><strong>What this section achieves</strong> — Ask the LLM to answer using retrieved evidence and explicit grounding instructions.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Citations</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Citations connect generated claims to the source passages used to support them. A trustworthy RAG system preserves source identifiers during ingestion and retrieval, then returns references precise enough for users to inspect the original page, section, record, or URL.</p><p><strong>What this section achieves</strong> — Return source references so users can inspect the evidence behind an answer.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Evaluation</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Evaluation is a measurable quality dimension used to determine whether the system behaves as intended. A useful evaluation defines the unit being measured, a representative dataset, a scoring method, acceptable thresholds, and a process for investigating failures rather than relying on anecdotal examples.</p><p><strong>What this section achieves</strong> — Measure retrieval quality, faithfulness, answer relevance, citation accuracy, latency, and cost.</p></div>
+</div>
+</div><div class="section"><h3>Playground and experiments</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Chunk-size comparison</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Compare small, medium, and large chunks for retrieval precision and answer quality.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Chunk overlap</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Chunk overlap is a key concept within the Retrieval-Augmented Generation module. In practice, it describes whether overlapping chunks preserve context or merely increase duplication.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Measure whether overlapping chunks preserve context or merely increase duplication.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Embedding comparison</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Test multiple models on the same document corpus.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Top-k retrieval</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Top-k retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Observe how retrieving too few or too many chunks affects answers.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Prompt grounding</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Prompt grounding concerns the instruction and context layer through which an application communicates intent to a language model. Prompt design influences behaviour but remains probabilistic, so robust implementations pair clear instructions with schemas, validation, tests, and deterministic controls.</p><p><strong>What this section achieves</strong> — Compare weak and strict instructions for using only retrieved evidence.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Failure analysis</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how failure analysis affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Inspect cases where the answer is wrong because retrieval, ranking, context, or generation failed.</p></div>
+</div>
+</div><div class="section"><h3>Mini projects</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>PDF chatbot</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — PDF chatbot is a key concept within the Retrieval-Augmented Generation module. In practice, it describes a conversational assistant that answers questions from uploaded PDFs and cites pages.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Build a conversational assistant that answers questions from uploaded PDFs and cites pages.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Personal knowledge base</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Personal knowledge base is a key concept within the Retrieval-Augmented Generation module. In practice, it describes index notes, technical documents, and reference material into a searchable assistant.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Index notes, technical documents, and reference material into a searchable assistant.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Company wiki assistant</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Build a multi-user knowledge assistant with access controls and source citations.</p></div>
+</div>
+</div></div></section><section class="module" id="module-08">
+<button class="module-header" onclick="toggleModule(this)">
+<div class="module-number">08</div>
+<div>
+<h2>Advanced RAG</h2>
+<p>Improve retrieval quality, robustness, and scalability using more sophisticated search and context-management techniques.</p>
+</div>
+<div class="chevron">⌄</div>
+</button>
+<div class="module-body">
+<div class="section"><h3>Core techniques</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Hybrid search</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Hybrid search combines lexical retrieval, which excels at exact words and identifiers, with vector retrieval, which excels at semantic similarity. Scores are fused or candidate sets are merged so the system benefits from both approaches rather than relying on a single retrieval signal.</p><p><strong>What this section achieves</strong> — Combine semantic vector retrieval with lexical search such as BM25 to capture both meaning and exact terms.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>BM25</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — BM25 is a probabilistic ranking function used in traditional information retrieval. It rewards documents containing important query terms while normalising for document length and term frequency, making it particularly effective for names, codes, acronyms, and rare technical vocabulary.</p><p><strong>What this section achieves</strong> — Understand classic keyword ranking and why it remains valuable for identifiers, names, codes, and specialised terminology.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Reranking</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Reranking uses a more accurate but slower model to score a small set of candidates returned by the first-stage retriever. Because the reranker jointly considers the query and each passage, it can improve ordering and relevance without applying an expensive model to the entire corpus.</p><p><strong>What this section achieves</strong> — Use a stronger model to reorder candidate passages after fast initial retrieval.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Query rewriting</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Query rewriting transforms a user’s conversational or underspecified question into one or more search-oriented queries. It can add missing context, resolve references, or generate domain terminology, but the rewritten query must preserve the original intent rather than invent assumptions.</p><p><strong>What this section achieves</strong> — Transform unclear or conversational questions into retrieval-friendly queries.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Multi-query retrieval</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Multi-query retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Generate several alternative searches to improve recall for ambiguous or complex questions.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Parent-child retrieval</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Parent-child retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Search small child chunks for precision while returning larger parent sections for context.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Context compression</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Context compression is a key concept within the Advanced RAG module. In practice, it describes extract only the relevant parts of retrieved documents before sending them to the LLM.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Extract only the relevant parts of retrieved documents before sending them to the LLM.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Metadata filtering</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Metadata filtering is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Restrict retrieval using document type, user permissions, project, date, source, or domain.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Deduplication</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Deduplication is a key concept within the Advanced RAG module. In practice, it describes remove repeated or near-identical evidence from the final context.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Remove repeated or near-identical evidence from the final context.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Recency weighting</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Recency weighting is a key concept within the Advanced RAG module. In practice, it describes prefer current information when freshness matters.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Prefer current information when freshness matters.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Domain-aware retrieval</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Domain-aware retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Adjust chunking, models, ranking, and filters for legal, scientific, technical, or business content.</p></div>
+</div>
+</div><div class="section"><h3>Playground and experiments</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Hybrid versus vector-only</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Compare retrieval quality across semantic, lexical, and combined strategies.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Reranker evaluation</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Reranker evaluation is a measurable quality dimension used to determine whether the system behaves as intended. A useful evaluation defines the unit being measured, a representative dataset, a scoring method, acceptable thresholds, and a process for investigating failures rather than relying on anecdotal examples.</p><p><strong>What this section achieves</strong> — Measure whether reranking improves top results enough to justify extra latency and cost.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Query rewrite analysis</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how query rewrite analysis affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Inspect when rewriting improves retrieval and when it distorts user intent.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Retrieval ablation</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how retrieval ablation affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Disable one component at a time to understand which techniques actually add value.</p></div>
+</div>
+</div><div class="section"><h3>Mini projects</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Legal assistant</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Retrieve clauses, legislation, and supporting documents with precise citations and metadata filters.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Research assistant</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Search across papers and reports, synthesise evidence, and preserve source traceability.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Technical documentation assistant</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Answer product and engineering questions across versioned documentation and code references.</p></div>
+</div>
+</div></div></section><section class="module" id="module-09">
+<button class="module-header" onclick="toggleModule(this)">
+<div class="module-number">09</div>
+<div>
+<h2>Database RAG</h2>
+<p>Enable natural-language access to structured data while maintaining correctness, security, and control.</p>
+</div>
+<div class="chevron">⌄</div>
+</button>
+<div class="module-body">
+<div class="section"><h3>Core topics</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Natural language to SQL</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Text-to-SQL systems translate a natural-language question into an executable database query. The model must connect user vocabulary to schema elements, joins, filters, aggregations, and business definitions, while the application constrains execution to safe, read-only, resource-limited operations.</p><p><strong>What this section achieves</strong> — Translate user questions into database queries while preserving intent and business meaning.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Schema understanding</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Schema understanding gives the model a meaningful representation of tables, columns, relationships, data types, and business definitions. Raw DDL is often insufficient; descriptions, examples, join guidance, and governed metrics can be essential for producing correct analytical queries.</p><p><strong>What this section achieves</strong> — Provide table, column, relationship, type, and business-definition context to the model.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Schema retrieval</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Schema retrieval is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Select only the relevant parts of a large schema before generating SQL.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>SQL generation</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — SQL generation connects probabilistic language understanding with structured data systems. The core challenge is to translate user intent into precise operations while preserving schema semantics, access control, validation, resource limits, and traceability.</p><p><strong>What this section achieves</strong> — Create syntactically correct and dialect-specific queries.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>SQL validation</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — SQL validation checks generated queries before they reach the database. A validator can parse the statement, reject writes or prohibited objects, enforce row and time limits, verify tenant filters, and ensure that only approved functions and schemas are used.</p><p><strong>What this section achieves</strong> — Parse or inspect generated SQL before execution to reject unsafe or invalid statements.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Read-only execution</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Read-only execution is a key concept within the Database RAG module. In practice, it describes restricted credentials, transactions, limits, and timeouts to reduce risk.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Use restricted credentials, transactions, limits, and timeouts to reduce risk.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Query repair</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Query repair is a key concept within the Database RAG module. In practice, it describes database errors back into a controlled correction loop.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Feed database errors back into a controlled correction loop.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Result interpretation</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Result interpretation is a key concept within the Database RAG module. In practice, it describes query results into explanations, tables, summaries, and charts.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Convert query results into explanations, tables, summaries, and charts.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Business semantics</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Business semantics is a key concept within the Database RAG module. In practice, it describes user terminology to calculated measures, dimensions, aliases, and domain-specific rules.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Map user terminology to calculated measures, dimensions, aliases, and domain-specific rules.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Database agents</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Database agents represents a responsibility or control pattern within an agentic workflow. It helps separate decision-making, information gathering, execution, and verification so each step can use appropriate tools, permissions, budgets, and evaluation criteria.</p><p><strong>What this section achieves</strong> — Allow a model to inspect schema, run approved queries, and iteratively refine its approach.</p></div>
+</div>
+</div><div class="section"><h3>Database options</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>SQLite</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — SQLite connects probabilistic language understanding with structured data systems. The core challenge is to translate user intent into precise operations while preserving schema semantics, access control, validation, resource limits, and traceability.</p><p><strong>What this section achieves</strong> — Use a lightweight local database for learning and prototypes.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>PostgreSQL</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — PostgreSQL connects probabilistic language understanding with structured data systems. The core challenge is to translate user intent into precise operations while preserving schema semantics, access control, validation, resource limits, and traceability.</p><p><strong>What this section achieves</strong> — Build against a production relational database with roles, views, extensions, and strong operational support.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>DuckDB</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — DuckDB is a key concept within the Database RAG module. In practice, it describes local files and columnar data efficiently using SQL without a separate database server.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Analyse local files and columnar data efficiently using SQL without a separate database server.</p></div>
+</div>
+</div><div class="section"><h3>Playground and experiments</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Simple text-to-SQL</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Simple text-to-SQL connects probabilistic language understanding with structured data systems. The core challenge is to translate user intent into precise operations while preserving schema semantics, access control, validation, resource limits, and traceability.</p><p><strong>What this section achieves</strong> — Generate and execute safe queries against a small sample schema.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Schema-size experiment</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how schema-size experiment affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Observe performance when the model sees the whole schema versus retrieved subsets.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Validation experiment</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how validation experiment affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Test allowlists, query limits, parsing, and read-only credentials.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Ambiguity handling</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Ambiguity handling is a key concept within the Database RAG module. In practice, it describes how the system responds when a business question has multiple valid interpretations.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Explore how the system responds when a business question has multiple valid interpretations.</p></div>
+</div>
+</div><div class="section"><h3>Mini project</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Conversational data analyst</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Conversational data analyst is a key concept within the Database RAG module. In practice, it describes an application that accepts natural-language questions, generates validated SQL, executes it safely, and explains the result.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Build an application that accepts natural-language questions, generates validated SQL, executes it safely, and explains the result.</p></div>
+</div>
+</div></div></section><section class="module" id="module-10">
+<button class="module-header" onclick="toggleModule(this)">
+<div class="module-number">10</div>
+<div>
+<h2>Agentic RAG</h2>
+<p>Combine retrieval with planning and iterative decision-making so the system can search, inspect, refine, and verify before answering.</p>
+</div>
+<div class="chevron">⌄</div>
+</button>
+<div class="module-body">
+<div class="section"><h3>Core topics</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Retrieval planning</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Retrieval planning is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Let the system decide what information is needed rather than issuing one fixed search.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Search iteration</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Search iteration is part of the information-retrieval layer that decides which external evidence reaches the model. Its design directly affects relevance, grounding, latency, and cost because a generator can only reason over the context that the retrieval system successfully selects and presents.</p><p><strong>What this section achieves</strong> — Perform multiple retrieval steps when the first results are incomplete.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Query decomposition</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Query decomposition is a key concept within the Agentic RAG module. In practice, it describes break multi-part questions into smaller searchable subquestions.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Break multi-part questions into smaller searchable subquestions.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Tool selection</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Tool selection is a key concept within the Agentic RAG module. In practice, it describes between vector search, keyword search, database access, web search, or domain tools.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Choose between vector search, keyword search, database access, web search, or domain tools.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Evidence inspection</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This is a controlled practical exercise for observing how evidence inspection affects a system. Rather than relying on intuition, you will hold other variables constant, capture outputs and metrics, inspect failures, and use the evidence to form an engineering judgement.</p><p><strong>What this section achieves</strong> — Review retrieved content and decide whether it is sufficient.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Reflection</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Reflection is a key concept within the Agentic RAG module. In practice, it describes missing evidence, contradictions, or weak support before finalising an answer.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Detect missing evidence, contradictions, or weak support before finalising an answer.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Verification</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Verification is a key concept within the Agentic RAG module. In practice, it describes check claims against sources or deterministic tools.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Check claims against sources or deterministic tools.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>State management</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — State management is a key concept within the Agentic RAG module. In practice, it describes the plan, searches, evidence, intermediate conclusions, and completion status.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Track the plan, searches, evidence, intermediate conclusions, and completion status.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Stopping conditions</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Stopping conditions is a key concept within the Agentic RAG module. In practice, it describes prevent endless loops by defining explicit success, failure, and budget limits.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Prevent endless loops by defining explicit success, failure, and budget limits.</p></div>
+</div>
+</div><div class="section"><h3>Playground and experiments</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Single-shot versus iterative RAG</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This comparison places the alternatives side by side using the criteria that matter in engineering decisions: capability, latency, cost, operational ownership, privacy, scalability, and failure behaviour. The goal is not to identify one universal winner, but to understand which option fits a particular workload and constraint set.</p><p><strong>What this section achieves</strong> — Compare a fixed retrieval pipeline with an agent that can search repeatedly.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Question decomposition</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Question decomposition is a key concept within the Agentic RAG module. In practice, it describes evaluate whether subquestions improve coverage for complex requests.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Evaluate whether subquestions improve coverage for complex requests.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Verifier loop</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Verifier loop represents a responsibility or control pattern within an agentic workflow. It helps separate decision-making, information gathering, execution, and verification so each step can use appropriate tools, permissions, budgets, and evaluation criteria.</p><p><strong>What this section achieves</strong> — Add a separate verification stage and measure whether unsupported claims decrease.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Budget limits</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — Budget limits is a key concept within the Agentic RAG module. In practice, it describes maximum searches, tokens, latency, and tool calls.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Control maximum searches, tokens, latency, and tool calls.</p></div>
+</div>
+</div><div class="section"><h3>Mini projects</h3>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Research assistant</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Plan and execute multi-step retrieval across documents, databases, and approved external sources.</p></div>
+</div>
+<div class="topic">
+<button class="topic-btn" onclick="toggleTopic(this)">
+<span>Report generator</span><span>＋</span>
+</button>
+<div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Gather evidence, organise findings, draft a structured report, and attach citations.</p></div>
+</div>
+</div></div></section><section class="module" id="module-11">
 <button class="module-header" onclick="toggleModule(this)">
 <div class="module-number">11</div>
 <div>
@@ -1806,8 +1809,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — This project turns the surrounding concepts into an end-to-end application. It combines a clear user problem, explicit system boundaries, model or retrieval components, validation, observability, and a usable interface so the topic is learned through software that behaves like a real product rather than a disposable notebook demo.</p><p><strong>What this section achieves</strong> — Build a service that runs test suites, stores outputs and metrics, compares versions, and visualises regressions.</p></div>
 </div>
-</div></div></section>
-<section class="module" id="module-12">
+</div></div></section><section class="module" id="module-12">
 <button class="module-header" onclick="toggleModule(this)">
 <div class="module-number">12</div>
 <div>
@@ -2002,8 +2004,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — Production deployment is part of the operational layer that turns an AI prototype into a dependable service. It addresses how the system is packaged, released, monitored, scaled, diagnosed, and recovered while preserving model configuration, data boundaries, and reproducibility.</p><p><strong>What this section achieves</strong> — Deploy one of the earlier AI applications with authentication, observability, evaluation checks, secrets management, Docker, and Kubernetes.</p></div>
 </div>
-</div></div></section>
-<section class="module" id="module-13">
+</div></div></section><section class="module" id="module-13">
 <button class="module-header" onclick="toggleModule(this)">
 <div class="module-number">13</div>
 <div>
@@ -2178,8 +2179,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 </button>
 <div class="topic-desc"><p><strong>Concept overview</strong> — Demonstration and retrospective is a key concept within the Capstone Project module. In practice, it describes present the finished system, explain design decisions, and identify the next improvements.. The concept should be considered in terms of its role in the wider architecture, the data it consumes and produces, its failure modes, and the trade-offs it introduces.</p><p><strong>What this section achieves</strong> — Present the finished system, explain design decisions, and identify the next improvements.</p></div>
 </div>
-</div></div></section>
-</main>
+</div></div></section></main>
 </div>
 <footer>
   This document is intended to remain a living high-level reference as each module is expanded into lessons, playgrounds, exercises, and projects.

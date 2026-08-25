@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Module 03 of the AI Engineering course: understand AI agents from first principles.">
+<title>Module 03 — AI Agents</title>
+<style>
+:root{--bg:#eef3f8;--panel:#fff;--ink:#1f2d3d;--muted:#617286;--brand:#174f7a;--brand2:#2c78b8;--line:#dbe5ef;--soft:#f6f9fc;--accent:#dfefff;--code:#102a3d}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+a{color:var(--brand2)}
+.hero{background:linear-gradient(135deg,#123f63 0%,#236b9e 55%,#4a91c5 100%);color:#fff;padding:28px 24px 58px}
+.hero-inner,.page{max-width:1120px;margin:auto}
+.back{display:inline-block;color:#fff;text-decoration:none;font-weight:700;margin-bottom:28px;opacity:.92}.back:hover{opacity:1;text-decoration:underline}
+.breadcrumb{font-size:.84rem;letter-spacing:.04em;opacity:.82;margin-bottom:12px}
+.eyebrow{font-size:.84rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:700}
+h1{font-size:clamp(2.4rem,6vw,4.5rem);line-height:1.04;margin:10px 0 18px;max-width:900px}
+.lead{font-size:1.14rem;max-width:880px;margin:0;opacity:.96}
+.hero-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.hero-tags span{padding:7px 11px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);border-radius:999px;font-size:.88rem}
+.page{padding:30px 20px 70px}
+.card,.lesson{background:var(--panel);border:1px solid rgba(219,229,239,.8);border-radius:18px;box-shadow:0 8px 30px rgba(23,79,122,.07);padding:clamp(20px,4vw,36px);margin-bottom:24px}
+.lesson>header{border-bottom:1px solid var(--line);margin-bottom:28px;padding-bottom:18px}
+h2{color:var(--brand);font-size:clamp(1.55rem,3vw,2.15rem);line-height:1.2;margin:0 0 14px}
+h3{color:#294f6c;font-size:1.25rem;line-height:1.3;margin:36px 0 10px}
+h4{color:var(--brand);margin:0 0 8px;font-size:1.08rem}
+p{margin:10px 0 16px}.muted{color:var(--muted)}
+.objective{border-left:5px solid var(--brand2)}
+.lesson-status{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;background:#e6f4ff;color:#174f7a;font-size:.76rem;font-weight:800;vertical-align:middle}
+.callout{margin:20px 0;padding:18px 20px;border:1px solid #bdd9ee;border-left:5px solid var(--brand2);border-radius:0 12px 12px 0;background:#f4faff}.callout.warning{border-color:#edcf8e;border-left-color:#c78316;background:#fff9ed}.callout p:last-child{margin-bottom:0}
+.protocol{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:stretch;margin:20px 0}.protocol>div{position:relative;padding:14px 10px;border:1px solid var(--line);border-radius:11px;background:var(--soft);text-align:center;font-size:.88rem}.protocol strong{display:block;color:var(--brand)}
+.file-link{display:inline-block;padding:10px 14px;border-radius:9px;background:var(--brand);color:#fff;text-decoration:none;font-weight:800}.file-link:hover{background:#0f3e61;text-decoration:underline}
+.roadmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;counter-reset:item;padding:0;list-style:none;margin:20px 0 0}
+.roadmap li{counter-increment:item;display:flex;align-items:center;gap:12px;background:var(--soft);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.roadmap li::before{content:counter(item,decimal-leading-zero);color:var(--brand);font-weight:800;font-size:.82rem}
+pre{margin:16px 0 22px;padding:18px 20px;overflow:auto;border-radius:12px;background:var(--code);color:#e8f5ff;font: .92rem/1.55 Consolas,"SFMono-Regular",monospace;white-space:pre}
+code{font-family:Consolas,"SFMono-Regular",monospace}.inline-flow{background:#eaf4fc;color:#163e5c;border:1px solid #cfe2f1}
+blockquote{margin:20px 0;padding:17px 20px;background:#edf7ff;border-left:5px solid var(--brand2);border-radius:0 12px 12px 0;color:#173f5d;font-size:1.08rem}
+.definition{font-size:1.24rem;font-weight:700;background:linear-gradient(90deg,#e3f2ff,#f6fbff)}
+.grid-2,.grid-4,.checkpoint-grid{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}.checkpoint-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.component,.mini-card{border:1px solid var(--line);background:var(--soft);border-radius:14px;padding:20px;min-width:0}.component{border-top:5px solid var(--brand2)}
+.component-number{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;border-radius:9px;background:var(--brand);color:#fff;font-weight:800;margin-bottom:12px}
+ul{padding-left:22px}.tool-list{columns:2;gap:30px}
+.compare{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch}.compare>div{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}.compare .versus{align-self:center;border:0;background:var(--brand);color:#fff;width:44px;height:44px;padding:9px;text-align:center;border-radius:50%;font-size:.75rem;font-weight:800}
+.principle{background:linear-gradient(135deg,#174f7a,#2c78b8);color:#fff;border-radius:15px;padding:22px 24px;margin:24px 0;font-size:1.18rem;text-align:center}.principle strong{display:block;font-size:1.28rem}
+.continuum{padding:22px;background:var(--soft);border:1px solid var(--line);border-radius:14px;overflow:auto}.continuum-labels{display:flex;justify-content:space-between;font-weight:700;color:var(--brand)}.continuum-line{height:5px;margin:13px 0 18px;background:linear-gradient(90deg,#9fc5e2,#174f7a);position:relative}.continuum-line::after{content:"";position:absolute;right:-1px;top:-6px;border-left:13px solid #174f7a;border-top:8px solid transparent;border-bottom:8px solid transparent}.continuum-steps{display:flex;justify-content:space-between;gap:15px;min-width:720px;font-size:.8rem;text-align:center}.continuum-steps span{max-width:95px}
+.classification{display:inline-block;background:var(--brand);color:#fff;border-radius:999px;padding:4px 10px;font-size:.82rem;font-weight:800}
+.exercise{border:2px solid #bdd9ee;background:linear-gradient(180deg,#fff,#f4faff)}.exercise ol{padding-left:24px}.exercise li{margin:13px 0}
+details{margin-top:20px;border:1px solid var(--line);border-radius:12px;background:#fff}summary{cursor:pointer;padding:15px 18px;color:var(--brand);font-weight:800}details[open] summary{border-bottom:1px solid var(--line)}.answers{padding:5px 20px 16px}
+.next{background:linear-gradient(135deg,#123f63,#2c78b8);color:#fff;border-radius:18px;padding:28px 30px;box-shadow:0 8px 30px rgba(23,79,122,.16)}.next small{letter-spacing:.1em;text-transform:uppercase;opacity:.8;font-weight:700}.next h2{color:#fff;margin:7px 0 10px}.next pre{background:rgba(8,29,44,.55);border:1px solid rgba(255,255,255,.15)}
+footer{text-align:center;color:var(--muted);padding:25px 20px 40px}
+@media(max-width:800px){.grid-2,.grid-4,.checkpoint-grid,.compare{grid-template-columns:1fr}.compare .versus{justify-self:center}.roadmap{grid-template-columns:1fr}.tool-list{columns:1}.protocol{grid-template-columns:1fr 1fr}.protocol>div:last-child{grid-column:1/-1}}
+@media(max-width:520px){.hero{padding:22px 18px 42px}.page{padding:20px 12px 50px}.card,.lesson{border-radius:14px;padding:20px 16px}pre{margin-left:-5px;margin-right:-5px;padding:15px;font-size:.82rem}}
+@media print{body{background:#fff}.hero{background:#174f7a}.card,.lesson{box-shadow:none;break-inside:avoid}.next{background:#174f7a}.back{display:none}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <a class="back" href="../AI_Engineering_Course_Map_2026_07_29.html">← Back to AI Engineering Course Map</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">AI Engineering &gt; Module 03 &gt; AI Agents</nav>
+    <div class="eyebrow">First-principles engineering</div>
+    <h1>Module 03 — AI Agents</h1>
+    <p class="lead">Understand what makes a system agentic, how an agent selects and executes actions, and what production frameworks are actually managing underneath.</p>
+    <div class="hero-tags" aria-label="Module topics"><span>Tools</span><span>State</span><span>Loops</span><span>Planning</span><span>Memory</span><span>Safety</span></div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="card objective" aria-labelledby="objective-title">
+    <h2 id="objective-title">Module objective</h2>
+    <p>The goal is to understand AI agents from an engineering and first-principles perspective <strong>before</strong> introducing frameworks such as LangGraph, LangChain agents, CrewAI, or similar tools.</p>
+    <p>By the end of this module, you should understand what those frameworks manage underneath: model calls, tools, state, loops, planning, memory, retries, approvals, and termination. Frameworks then become implementation choices—not magic.</p>
+  </section>
+
+  <section class="card" aria-labelledby="roadmap-title">
+    <h2 id="roadmap-title">Module roadmap</h2>
+    <ol class="roadmap">
+      <li>What an agent actually is</li><li>Tool calling</li><li>The agent loop</li><li>State and memory</li><li>Planning</li><li>Error handling and retries</li><li>Stopping conditions and budgets</li><li>Human-in-the-loop</li><li>Deterministic workflows vs agents</li><li>Build a real agent from scratch in Python</li><li>Compare LangGraph and similar orchestration approaches</li>
+    </ol>
+  </section>
+
+  <article class="lesson">
+    <header><div class="eyebrow" style="color:#2c78b8">Lesson 1</div><h2>What is an AI Agent?</h2><p class="muted">Start with the control-flow decision that separates an ordinary LLM application from an agent.</p></header>
+
+    <section><h3>Normal LLM application</h3><p>This is simply an LLM call. It is <strong>not</strong> an agent:</p><pre class="inline-flow"><code>User → LLM → Answer</code></pre><pre><code>response = model("Explain Kubernetes")</code></pre><p>The model receives input and generates output, but it is not deciding what actions should happen next.</p></section>
+
+    <section><h3>From a question to a goal</h3><blockquote>Investigate why my Kubernetes deployment is failing and tell me what I should fix.</blockquote><p>A useful AI system may need to perform a sequence of investigations:</p><pre class="inline-flow"><code>inspect deployment
+       ↓
+inspect pods
+       ↓
+read events
+       ↓
+read logs
+       ↓
+form hypothesis
+       ↓
+inspect configuration
+       ↓
+verify hypothesis
+       ↓
+recommend fix</code></pre><p>The important difference is that the model can decide: <strong>What should I do next?</strong></p></section>
+
+    <section><h3>Engineering definition of an AI agent</h3><blockquote class="definition">An AI agent is a system where an LLM participates in choosing the next action required to achieve some goal.</blockquote><p>This definition is intentionally practical rather than marketing-oriented. It tells us where to look in the architecture: at the point where control flow is chosen.</p><pre class="inline-flow"><code>          Goal
+           │
+           ▼
+      ┌─────────┐
+      │   LLM   │
+      └────┬────┘
+           │
+     choose action
+           │
+           ▼
+      ┌─────────┐
+      │  Tool   │
+      └────┬────┘
+           │
+        result
+           │
+           └──────────┐
+                      │
+                      ▼
+                   LLM again</code></pre></section>
+
+    <section><h3>The agent loop</h3><pre class="inline-flow"><code>Observe
+   ↓
+Decide
+   ↓
+Act
+   ↓
+Observe result
+   ↓
+Decide again</code></pre><p>The loop continues until the goal is completed, the agent cannot progress, or a stopping condition is reached. A production system must define all three outcomes explicitly.</p></section>
+  </article>
+
+  <section class="card" aria-labelledby="workflow-title"><h2 id="workflow-title">Workflow vs agent</h2><p>This distinction is foundational.</p><div class="compare"><div><h3 style="margin-top:0">Deterministic workflow</h3><pre><code>logs = get_logs()
+errors = analyse_logs(logs)
+report = generate_report(errors)</code></pre><p>The execution order is predetermined. An LLM may participate in some stages, but the application controls the flow.</p></div><div class="versus">VS</div><div><h3 style="margin-top:0">Agent</h3><pre><code>LLM: "I need logs."
+→ get_logs()
+
+LLM: "The logs suggest a database issue.
+I should inspect database connectivity."
+→ check_database()
+
+LLM: "Database is healthy. I should
+inspect the application environment."
+→ inspect_environment()</code></pre><p>Here, the model determines which action should happen next.</p></div></div><blockquote><strong>The presence of an LLM does not automatically make a system an agent.</strong></blockquote><blockquote><strong>The presence of tools does not automatically make a system an agent.</strong></blockquote><div class="principle">The important question is:<strong>Where is the model making an autonomous control-flow decision?</strong></div></section>
+
+  <section class="card" aria-labelledby="components-title"><h2 id="components-title">Four core components of an agent</h2><div class="grid-4">
+    <section class="component"><span class="component-number">1</span><h3 style="margin-top:0">Goal</h3><p>An agent works toward a goal rather than merely responding to one isolated prompt.</p><ul><li>Find the root cause of this deployment failure.</li><li>Research this company and produce a risk summary.</li><li>Review this pull request.</li><li>Plan a five-day trip.</li><li>Investigate this production incident.</li></ul></section>
+    <section class="component"><span class="component-number">2</span><h3 style="margin-top:0">LLM</h3><p>The LLM is the decision-making component. Given the current state, it may decide:</p><pre><code>I have enough information
+→ answer the user
+
+I need more information
+→ call a tool
+
+The previous tool failed
+→ try another approach</code></pre><p>The LLM usually does not execute the action itself. The host application executes the requested tool and sends the result back.</p></section>
+    <section class="component"><span class="component-number">3</span><h3 style="margin-top:0">Tools</h3><p>Tools expose external capabilities to the agent.</p><pre><code>def get_pod_logs(namespace: str, pod: str):
+    ...
+
+def search_documents(query: str):
+    ...
+
+def get_customer(customer_id: str):
+    ...
+
+def calculator(expression: str):
+    ...</code></pre><ul class="tool-list"><li>web search</li><li>filesystem</li><li>GitHub</li><li>SQL database</li><li>APIs</li><li>email</li><li>Kubernetes</li><li>AWS</li><li>Python execution</li><li>calculators</li></ul><pre class="inline-flow"><code>LLM chooses tool
+       ↓
+Application executes tool
+       ↓
+Tool result returned to LLM
+       ↓
+LLM decides what to do next</code></pre></section>
+    <section class="component"><span class="component-number">4</span><h3 style="margin-top:0">State</h3><p>State contains information accumulated while solving a task.</p><pre><code>state = {
+    "goal": "Investigate deployment failure",
+    "observations": [...],
+    "tool_calls": [...],
+    "current_hypothesis": "...",
+    "steps": 4,
+}</code></pre><p>State may include conversation history, working state, short-term memory, and long-term memory. A later lesson will separate these concepts properly.</p></section>
+  </div></section>
+
+  <section class="card" aria-labelledby="example-title"><h2 id="example-title">Simple agent example</h2><p>Give an agent two tools: <code>get_weather(city)</code> and <code>get_current_time(city)</code>.</p><blockquote>Tell me whether this evening would be good for an outdoor run in Perth.</blockquote><pre class="inline-flow"><code>User goal
+   ↓
+LLM decides it needs weather
+   ↓
+get_weather("Perth")
+   ↓
+weather result
+   ↓
+LLM decides it needs current local time
+   ↓
+get_current_time("Perth")
+   ↓
+time result
+   ↓
+LLM decides it has enough information
+   ↓
+Final answer</code></pre><p>The application may therefore execute:</p><pre class="inline-flow"><code>LLM
+ ↓
+Tool
+ ↓
+LLM
+ ↓
+Tool
+ ↓
+LLM
+ ↓
+Final answer</code></pre><p>This is the simplest useful mental model for an agent.</p></section>
+
+  <section class="card" aria-labelledby="rag-title"><h2 id="rag-title">Where RAG fits</h2><p>RAG is <strong>not required</strong> for agents. A retrieval tool might internally perform:</p><pre class="inline-flow"><code>question
+   ↓
+embedding
+   ↓
+vector database
+   ↓
+relevant documents</code></pre><p>From the agent's point of view, retrieval can simply be one tool among many:</p><pre class="inline-flow"><code>Agent
+  │
+  ├── search_documents()
+  ├── search_web()
+  ├── query_database()
+  ├── read_github()
+  ├── run_python()
+  └── calculator()</code></pre><p>This is why we learn agents before the deeper RAG modules: retrieval is one possible capability inside a broader agent architecture.</p></section>
+
+  <section class="card" aria-labelledby="autonomy-title"><h2 id="autonomy-title">Agent autonomy is a spectrum</h2><div class="continuum" role="img" aria-label="Continuum from deterministic LLM calls to autonomous long-running agents"><div class="continuum-labels"><span>Deterministic</span><span>Autonomous</span></div><div class="continuum-line"></div><div class="continuum-steps"><span>LLM call</span><span>Fixed workflow</span><span>Tool selection</span><span>Iterative tool selection</span><span>Planning</span><span>Plan adaptation</span><span>Long-running autonomous agent</span></div></div><p>Increasing autonomy generally also increases:</p><div class="grid-2"><ul><li>flexibility</li><li>unpredictability</li><li>debugging difficulty</li><li>cost</li></ul><ul><li>latency</li><li>security risk</li><li>operational complexity</li></ul></div><div class="principle"><span>Engineering principle</span><strong>Use the minimum level of autonomy necessary to solve the problem well.</strong></div></section>
+
+  <section class="card" aria-labelledby="checkpoint-title"><h2 id="checkpoint-title">Mental checkpoint</h2><div class="checkpoint-grid">
+    <section class="mini-card"><h3 style="margin-top:0">System A</h3><pre><code>summary = llm(document)</code></pre><span class="classification">LLM call</span></section>
+    <section class="mini-card"><h3 style="margin-top:0">System B</h3><pre><code>docs = search_documents(question)
+answer = llm(question, docs)</code></pre><span class="classification">Deterministic RAG workflow</span></section>
+    <section class="mini-card"><h3 style="margin-top:0">System C</h3><pre><code>User asks question
+
+LLM → search documents
+Weak evidence
+LLM → search database
+Project ID found
+LLM → search documents with ID
+Sufficient evidence → answer</code></pre><span class="classification">Agentic</span></section>
+  </div><blockquote><strong>The key difference is that the model determines part of the control flow.</strong></blockquote></section>
+
+  <section class="card exercise" aria-labelledby="exercise-title"><h2 id="exercise-title">Lesson exercise</h2><p>Classify each system as an <strong>LLM call</strong>, <strong>workflow</strong>, or <strong>agentic system</strong>.</p><ol><li>User uploads a PDF → application extracts text → LLM summarises it.</li><li>User asks a question → application always queries a vector DB → LLM answers from retrieved chunks.</li><li>User asks a support question → LLM decides whether to search documentation, inspect the customer's account, or ask the user for more information.</li><li>LLM generates SQL → application validates it → database executes it → LLM explains the result.</li><li>LLM tries SQL, sees an error, examines the schema, fixes the query, executes again, and decides when it has enough information.</li></ol><details><summary>Show answers</summary><div class="answers"><ol><li>LLM call / simple workflow</li><li>RAG workflow</li><li>Agentic</li><li>Workflow with LLM/tool use</li><li>Agentic</li></ol></div></details></section>
+
+  <article class="lesson" id="lesson-2">
+    <header><div class="eyebrow" style="color:#2c78b8">Lesson 2 <span class="lesson-status">In progress</span></div><h2>Tool Calling from Scratch in Python</h2><p class="muted">Build one complete tool-use turn with a provider SDK and explicit host-controlled execution—no agent framework and no hidden loop.</p></header>
+
+    <section>
+      <h3>Learning outcomes</h3>
+      <p>By the end of this lesson, you should be able to:</p>
+      <div class="grid-2">
+        <ul><li>Explain why a tool definition is a contract, not executable access.</li><li>Recognise a function-call item in a model response.</li><li>Correlate a tool result with its request using <code>call_id</code>.</li></ul>
+        <ul><li>Dispatch only allowlisted tools from trusted host code.</li><li>Validate model-generated arguments before execution.</li><li>Explain why this bounded example is not yet a full agent loop.</li></ul>
+      </div>
+    </section>
+
+    <section>
+      <h3>The mental model: proposal versus execution</h3>
+      <blockquote class="definition">A tool call is structured model output that proposes an action. It is not the action itself.</blockquote>
+      <p>The model sees a tool's name, description, and JSON Schema. It can emit a request containing the chosen tool and arguments. The provider does not reach into your Python process and invoke the function: your application owns that boundary.</p>
+      <div class="protocol" aria-label="Five-stage tool-calling protocol">
+        <div><strong>1 · Describe</strong>Host sends tool schema</div>
+        <div><strong>2 · Decide</strong>Model emits a request</div>
+        <div><strong>3 · Validate</strong>Host checks the request</div>
+        <div><strong>4 · Execute</strong>Host calls trusted code</div>
+        <div><strong>5 · Observe</strong>Model receives the result</div>
+      </div>
+      <p>This separation is the security and reliability boundary. The model proposes; deterministic application code authorises and executes.</p>
+    </section>
+
+    <section>
+      <h3>The three contracts</h3>
+      <div class="grid-2">
+        <section class="mini-card"><h4>Tool definition</h4><p>Provider-facing metadata tells the model when a capability is relevant and which arguments are valid.</p><pre><code>{
+  "type": "function",
+  "name": "lookup_service_health",
+  "description": "Read service health telemetry.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "service": {"type": "string"},
+      "environment": {"type": "string"}
+    },
+    "required": ["service", "environment"],
+    "additionalProperties": false
+  },
+  "strict": true
+}</code></pre></section>
+        <section class="mini-card"><h4>Python implementation</h4><p>Trusted code performs the real operation. Its signature should agree with the schema, but the two are not automatically connected.</p><pre><code>def lookup_service_health(
+    service: str,
+    environment: str,
+) -&gt; dict[str, object]:
+    ...</code></pre><h4>Dispatcher</h4><p>An explicit allowlist maps a model-visible name to a callable. Never turn the model's string into arbitrary code with <code>eval</code>, shell interpolation, dynamic import, or unconstrained attribute access.</p><pre><code>TOOLS = {
+    "lookup_service_health":
+        lookup_service_health,
+}</code></pre></section>
+      </div>
+      <div class="callout"><strong>Why strict mode still needs host validation</strong><p>A strict schema improves the shape of generated arguments. It does not decide whether a request is authorised, whether values are safe in your domain, or whether the caller may perform a side effect. Those remain application responsibilities.</p></div>
+    </section>
+
+    <section>
+      <h3>One bounded tool-use turn</h3>
+      <p>For the question <em>“Is checkout healthy in production?”</em>, the protocol should look like this:</p>
+      <pre class="inline-flow"><code>User question
+      ↓
+Model response: function_call
+  name = "lookup_service_health"
+  arguments = {"service":"checkout","environment":"production"}
+      ↓
+Host parses → validates → dispatches
+      ↓
+function_call_output
+  call_id = same request identifier
+  output = {"ok":true,"data":{"status":"degraded", ...}}
+      ↓
+Second model call explains the observation
+      ↓
+Final answer</code></pre>
+      <p>The <code>call_id</code> is correlation data, analogous to a request ID in a distributed system. It tells the model which result belongs to which requested action.</p>
+    </section>
+
+    <section>
+      <h3>Implementation shape</h3>
+      <p>The playground uses the OpenAI Responses API, but keeps provider interaction at the edge. The important control flow remains ordinary Python:</p>
+      <pre><code>response = client.responses.create(
+    model=model,
+    input=input_items,
+    tools=TOOL_DEFINITIONS,
+    parallel_tool_calls=False,
+)
+
+tool_calls = [
+    item for item in response.output
+    if item.type == "function_call"
+]
+
+result = execute_tool_call(call.name, call.arguments)
+input_items += response.output
+input_items.append({
+    "type": "function_call_output",
+    "call_id": call.call_id,
+    "output": json.dumps(result),
+})
+
+final = client.responses.create(
+    model=model,
+    input=input_items,
+    tools=TOOL_DEFINITIONS,
+)</code></pre>
+      <p>The full example also handles the valid <em>no tool requested</em> path, rejects multiple calls in this bounded lesson, wraps tool success or failure in structured output, and logs the protocol boundary.</p>
+      <p><a class="file-link" href="../../playgrounds/tool-calling-from-scratch/README.md">Open the Lesson 2 playground →</a></p>
+      <p class="muted">SDK details follow the current <a href="https://developers.openai.com/api/docs/guides/function-calling">official OpenAI function-calling guide</a>. The underlying protocol is provider-neutral even though field names differ across APIs.</p>
+    </section>
+
+    <section>
+      <h3>Failure modes to notice now</h3>
+      <div class="grid-2">
+        <section class="component"><h4>Model-side</h4><ul><li>No tool call: the question may not need one.</li><li>Wrong tool selection: descriptions may be ambiguous.</li><li>Invalid or surprising arguments: schemas reduce, but do not remove, validation needs.</li><li>Repeated tool requests: this lesson refuses them rather than looping.</li></ul></section>
+        <section class="component"><h4>Host-side</h4><ul><li>Unknown tool names must fail closed.</li><li>Tool exceptions need a deliberate result contract.</li><li>Timeouts and provider errors require bounded handling.</li><li>Side-effecting tools need authorisation, idempotency, and often human approval.</li></ul></section>
+      </div>
+      <div class="callout warning"><strong>Treat both directions as untrusted</strong><p>Model-generated arguments are untrusted input to your application. Tool results are untrusted input to the model and may contain prompt injection. Validate, minimise, label, and log data crossing either boundary; never place secrets in tool descriptions or outputs.</p></div>
+    </section>
+
+    <section class="exercise" style="border-radius:14px;padding:22px" aria-labelledby="lesson-2-exercise-title">
+      <h3 id="lesson-2-exercise-title" style="margin-top:0">Hands-on exercise</h3>
+      <ol>
+        <li>Follow the playground README to create a virtual environment and configure <code>.env</code>.</li>
+        <li>Run the offline tests first. Read <code>execute_tool_call</code> and identify every place the host—not the model—enforces policy.</li>
+        <li>Run the default production-checkout question. Capture the requested name, arguments, <code>call_id</code>, tool result, and final answer.</li>
+        <li>Ask about <em>catalog in staging</em>. Confirm that the final answer preserves the tool's <code>unknown</code> state rather than inventing health.</li>
+        <li>Ask an unrelated conceptual question. Observe whether the model answers without requesting the tool.</li>
+      </ol>
+      <details><summary>Extension: add one safe tool</summary><div class="answers"><p>Add a deterministic <code>get_incident</code> tool that accepts an incident ID. Update the JSON Schema, Python implementation, registry, validation, and offline tests. Keep the execution bounded to one call for now. If the model needs health first and incident details second, that limitation is intentional: it motivates Lesson 3.</p></div></details>
+    </section>
+
+    <section>
+      <h3>Checkpoint</h3>
+      <details><summary>Does tool calling make this an agent?</summary><div class="answers"><p>Not by itself. The model chooses whether to request one available action, but the host workflow permits only one tool-use turn and then forces a final response. It demonstrates an agentic control-flow decision inside a bounded workflow, not a general autonomous agent loop.</p></div></details>
+      <details><summary>Why return the first response output as well as the tool result?</summary><div class="answers"><p>The next model call needs the preceding response items—including the function request—and the correlated <code>function_call_output</code>. Together they preserve the protocol history: what was requested and what was observed.</p></div></details>
+      <details><summary>Who owns permissions and side effects?</summary><div class="answers"><p>The host application. A schema advertises a capability; it does not grant authority. Authentication, authorisation, approval, rate limits, timeouts, and idempotency belong around the real tool implementation.</p></div></details>
+    </section>
+  </article>
+
+  <section class="next" aria-labelledby="next-lesson-title"><small>Next lesson</small><h2 id="next-lesson-title">Lesson 3 — The Agent Loop</h2><p>We will turn the bounded exchange into an explicit loop that can process zero, one, or several tool-use turns while preserving state and enforcing a step budget:</p><pre><code>for step in range(max_steps):
+    response = model.decide(state)
+    if response.is_final:
+        return response.answer
+    observations = execute_requested_tools(response)
+    state.extend(response, observations)
+
+raise StepBudgetExceeded(max_steps)</code></pre><p>That introduces the key production questions: termination, repeated calls, partial failure, observability, and what the host should do when the model does not finish.</p></section>
+</main>
+<footer>AI Engineering · Module 03 · AI Agents</footer>
+</body>
+</html>
