@@ -12,6 +12,9 @@ venv/
 .ruff_cache/
 *.egg-info/
 
+# Jupyter
+.ipynb_checkpoints/
+
 # Node / React
 node_modules/
 dist/

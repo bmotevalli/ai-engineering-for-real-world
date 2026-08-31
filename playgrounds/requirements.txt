@@ -1,0 +1,18 @@
+# Shared dependencies for every playground in the course.
+# Create one virtual environment at the repository root and install this once:
+#
+#   python -m venv .venv
+#   .venv\Scripts\Activate.ps1
+#   pip install -r playgrounds/requirements.txt
+#
+# Add a dependency here only when a lesson genuinely needs it.
+
+# Provider SDKs
+openai>=1.99.0
+
+# Configuration
+python-dotenv>=1.0.0
+
+# Notebook environment for playgrounds and examples
+jupyterlab>=4.0.0
+ipykernel>=6.29.0

@@ -43,7 +43,8 @@ progress can be corrected cheaply.
 A lesson is a teaching turn, not just a code drop. Shape it as:
 
 1. **Concept** — the mental model and why it matters, at senior-engineer level.
-2. **Plain Python implementation** — provider SDK, explicit control flow, no framework.
+2. **Plain Python implementation** — provider SDK, explicit control flow, no framework,
+   built up as notebook cells (see the notebook-first rules in `AGENTS.md`).
 3. **Run it / show the trace** — make the mechanism observable (requests, tool calls, state).
 4. **Trade-offs** — failure modes, cost, latency, safety, when this breaks in production.
 5. **Framework comparison**, only after the mechanism is understood: what it abstracts,
@@ -51,17 +52,30 @@ A lesson is a teaching turn, not just a code drop. Shape it as:
 
 Explain as you go in the chat response; put only the durable parts in `docs/`.
 
+The lesson page and the notebook are written together, not sequentially. Decide the cell
+sequence first, then write both from it, so the page walks through the same cells in the
+same order. If they drift, the page is wrong — it is the surface most readers use.
+
 ## Finishing a lesson
 
 Before declaring a lesson done:
 
-- [ ] Working code committed to the right place (`playgrounds/<module>/<NN-topic>/`), created
-      only when the lesson actually needs it — no empty scaffolding.
-- [ ] `.env.example` updated if the lesson introduced new configuration (placeholders only).
+- [ ] Working code committed to the right place — `playgrounds/<nn>-<module>/<topic>/`, for
+      example `playgrounds/03-ai-agents/tool-calling-from-scratch/` — created only when the
+      lesson actually needs it, with no empty scaffolding. The teaching artifact is a
+      **notebook**; testable logic lives in a sibling `.py` the notebook imports.
+- [ ] The lesson page walks through the notebook's cells inline — explanation, real cell
+      code, what the output shows — and *then* links to the notebook. A page that only links
+      to code is not finished.
+- [ ] `.env.example` updated if the lesson introduced new configuration (placeholders only),
+      and any new dependency added to the shared `playgrounds/requirements.txt`.
 - [ ] Module documentation updated **only** with durable learning value — concepts, diagrams,
       distinctions, trade-offs, exercises, links to the playground code.
 - [ ] `AGENTS.md` progress section updated (completed lesson, current lesson, next step).
-- [ ] Links between course map, module page, and code still valid and relative.
+- [ ] Links between course map, module page, and code still valid. Relative links **only
+      within `docs/`**; link to `playgrounds/`, `projects/`, or any other out-of-`docs/` code
+      with an absolute `https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/...`
+      URL, because GitHub Pages publishes `docs/` as the site root and a `../../` escape 404s.
 
 Do not transcribe the conversation into the docs. Curate.
 
@@ -77,6 +91,17 @@ The course docs are large, hand-styled, self-contained HTML files (the course ma
   new styling.
 - Each module page ends with a `.next` block describing the following lesson; keep it accurate.
 - Check the responsive breakpoints (800px / 520px) if a change is structurally visual.
+
+## Authoring notebooks
+
+- Create and modify `.ipynb` files with the `NotebookEdit` tool, and read them with `Read`,
+  which renders cells and outputs. Do not hand-write notebook JSON with `Write`, and do not
+  edit it as text with `Edit` — that corrupts cell ids and output structure.
+- Do not fabricate cell outputs. Either execute the notebook and keep the real output, or
+  leave the cell unexecuted and say in the chat that it has not been run. A committed output
+  is a claim that the code ran.
+- Notebook diffs are noisy. Re-running everything before committing churns unrelated cells,
+  so re-run only what the change actually affects.
 
 ## Environment notes
 
@@ -101,14 +126,17 @@ The course docs are large, hand-styled, self-contained HTML files (the course ma
 - When a lesson produces something worth showing visually (an architecture diagram, a
   comparison table), an Artifact is fine — but the durable version still belongs in `docs/`.
 
-## Current context (2026-08-18)
+## Current context (2026-08-31)
 
-- Active module: **Module 03 — AI Agents**.
-- Completed: Lesson 1 — What is an AI Agent?
-- Next learning task: **Lesson 2 — Tool Calling from Scratch in Python**, implementing
-  `User -> LLM -> tool request -> Python executes tool -> tool result -> LLM -> final answer`
-  directly against a provider SDK, before any agent framework.
-- `playgrounds/`, `projects/`, `src/`, and `tests/` do not exist yet. Create them when the
-  first real exercise needs them.
+- Active module: **Module 03 — AI Agents**. See the `## Course progress` section of
+  `AGENTS.md` for the authoritative lesson state.
+- Lesson 2's playground lives at `playgrounds/03-ai-agents/tool-calling-from-scratch/` and is
+  currently a script, not a notebook — it predates the notebook-first rule. New playgrounds
+  are notebooks; leave this one as it is unless asked to convert it.
+- `projects/`, `src/`, and `tests/` do not exist yet. Create them when the first real
+  exercise needs them.
+- The Lesson 2 walkthrough in the module page was generated by extracting fragments verbatim
+  from `tool_calling.py`. If that script changes, the page's code blocks must be updated to
+  match — they are presented as pasteable in sequence, and that claim is checkable.
 
 If this section disagrees with `AGENTS.md`, `AGENTS.md` is correct — fix this file.
