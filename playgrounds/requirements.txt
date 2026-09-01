@@ -10,6 +10,9 @@
 # Provider SDKs
 openai>=1.99.0
 
+# HTTP clients
+requests>=2.32.0
+
 # Configuration
 python-dotenv>=1.0.0
 
