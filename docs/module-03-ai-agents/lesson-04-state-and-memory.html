@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 4 — State and Memory</title>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#24292f;--muted:#6e7781;--line:#d0d7de;--blue:#0969da;--code:#f6f8fa;--warn:#fff8c5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.topin{max-width:1100px;margin:auto;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:var(--blue);text-decoration:none;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-block;background:var(--blue);color:#fff!important;padding:8px 12px;border-radius:7px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px 60px}.notebook{background:var(--paper);border:1px solid var(--line);box-shadow:0 3px 14px rgba(31,35,40,.08)}.nb-head{padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfd}.nb-head h1{margin:0 0 6px;font-size:1.45rem}.nb-head p{margin:0;color:var(--muted)}.cell{display:grid;grid-template-columns:78px 1fr;border-bottom:1px solid #eaeef2}.prompt{padding:18px 10px;text-align:right;color:#8c959f;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}.cell-body{padding:18px 24px;min-width:0}.markdown-cell .cell-body{background:#fff}.code-cell .cell-body{background:#fbfcfd}h1,h2,h3{line-height:1.25}h2{font-size:1.35rem;margin-top:10px}h3{font-size:1.12rem}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.code-cell pre{background:#0d1117;color:#e6edf3;border-color:#30363d}blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f6f8fa}.note{max-width:1100px;margin:0 auto 16px;padding:0 16px;color:var(--muted)}.warning{background:var(--warn);border:1px solid #d4a72c;border-radius:8px;padding:12px 14px}.flow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f6f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre;overflow:auto}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fbfcfd}@media(max-width:700px){.cell{grid-template-columns:1fr}.prompt{text-align:left;padding:8px 14px;border-bottom:1px solid #eee}.cell-body{padding:16px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="topin"><div><a href="index.html">← Module 03 — AI Agents</a></div><div class="actions"><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/playgrounds/03-ai-agents/state-and-memory/lesson-04-state-and-memory.ipynb" class="button">Download .ipynb</a><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/playgrounds/03-ai-agents/state-and-memory">Open playground</a></div></div></nav>
+<div class="note"><p>This page mirrors the runnable notebook. The lesson keeps state and memory explicit before introducing any memory framework or vector database.</p></div>
+<main class="wrap"><article class="notebook">
+<header class="nb-head"><h1>Lesson 4 — State and Memory</h1><p>Module 03 · AI Agents · what the current run knows versus what future runs remember</p></header>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>The distinction that matters</h2><p>Agent frameworks often use <em>state</em>, <em>history</em>, <em>context</em>, and <em>memory</em> loosely. In production systems, treating them as the same thing creates problems.</p><blockquote><strong>State is what the current run needs. Memory is what the application deliberately carries into a future run.</strong></blockquote><p>Lesson 3 already depended on state: after a tool call, the next model decision needed the earlier request and the tool observation. Lesson 4 makes that hidden requirement explicit and then adds durable memory separately.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>State is broader than chat history</h2><div class="cards"><div class="card"><h3>Model-facing context</h3><p>User messages, model outputs, tool calls, and tool observations that the next model call needs.</p></div><div class="card"><h3>Application-owned state</h3><p>Step counters, permissions, request IDs, workflow status, budgets, references, and other structured metadata.</p></div></div><p>Important control data should not be hidden inside prose and handed to the model as if it were authoritative. The application owns it.</p><div class="flow">AgentState
+  ├── goal
+  ├── step / max_steps
+  ├── input_items      ← provider protocol history
+  └── observations     ← structured application trace</div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 1 — Explicit working state</h2><p>A small <code>AgentState</code> dataclass makes the current task inspectable. The protocol history and deterministic host metadata are related, but not the same thing.</p></div></section>
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from dataclasses import dataclass, field
+from typing import Any
+
+@dataclass
+class AgentState:
+    goal: str
+    max_steps: int = 5
+    step: int = 0
+    input_items: list[Any] = field(default_factory=list)
+    observations: list[dict[str, Any]] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if not self.input_items:
+            self.input_items.append(
+                {"role": "user", "content": self.goal}
+            )</code></pre><p><code>step</code> and <code>max_steps</code> are host control data. The model does not get to redefine them. <code>observations</code> gives the application a structured trace that is easier to test and log than natural-language history.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>State dies with the task unless you persist it</h2><p>Suppose the current travel task finishes. The tool outputs, temporary weather facts, and step counters are no longer needed. Throwing them away is often correct.</p><p>But a stable user preference may be worth carrying into a later task:</p><blockquote>I prefer vegetarian food and morning departures.</blockquote><p>That is where <strong>memory</strong> begins.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 2 — Durable memory across sessions</h2><p>To keep the mechanics visible, the notebook uses a tiny JSON-backed memory store. A production system would usually replace the storage layer, but the contract remains the same.</p></div></section>
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>import json
+from pathlib import Path
+
+class JsonMemoryStore:
+    def __init__(self, path: Path) -> None:
+        self.path = path
+
+    def get_preferences(self, user_id: str) -> dict[str, str]:
+        if not self.path.exists():
+            return {}
+        data = json.loads(self.path.read_text(encoding="utf-8"))
+        return data.get(user_id, {})
+
+    def set_preference(self, user_id: str, key: str, value: str) -> None:
+        data = {}
+        if self.path.exists():
+            data = json.loads(self.path.read_text(encoding="utf-8"))
+        data.setdefault(user_id, {})[key] = value
+        self.path.write_text(json.dumps(data, indent=2), encoding="utf-8")</code></pre><p>This intentionally simple store exposes the important idea: memory is application data with a lifecycle. It can be read, changed, deleted, scoped, audited, and protected independently from the model.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>Persist only information worth remembering</h3><p>The notebook stores two explicit preferences:</p></div></section>
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>memory.set_preference("demo-user", "diet", "vegetarian")
+memory.set_preference("demo-user", "departure_time", "morning")
+
+preferences = memory.get_preferences("demo-user")
+preferences</code></pre><p>Compare those durable preferences with a tool observation such as <code>rain_probability=70%</code>. The observation may be useful now, but would become stale quickly. Persisting it as a long-term user memory would be misleading.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Memory does nothing until the application retrieves it</h2><p>A model API does not magically remember your database. The host decides what memory is relevant, retrieves it, and places it into the current context.</p><div class="flow">Durable memory store
+        ↓ retrieve selected memory
+Context builder
+   + current goal
+   + current working state
+        ↓
+Model call</div><p>For a travel request, dietary and departure-time preferences are useful. For a code-review agent, they probably are not.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>def build_memory_context(preferences: dict[str, str]) -> str:
+    if not preferences:
+        return "No saved user preferences."
+
+    lines = [
+        f"- {key}: {value}"
+        for key, value in sorted(preferences.items())
+    ]
+    return "Saved user preferences:\n" + "\n".join(lines)</code></pre><p>The notebook then sends this selected context into a fresh model request. The old agent state is gone. Only deliberately retained memory crosses the session boundary.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Useful memory categories</h2><div class="cards"><div class="card"><h3>Working / short-term</h3><p>Current goal, observations, intermediate results, protocol history.</p></div><div class="card"><h3>Episodic</h3><p>Selected records of previous interactions or events.</p></div><div class="card"><h3>Semantic</h3><p>Stable facts and preferences such as language or dietary preference.</p></div><div class="card"><h3>Procedural</h3><p>Durable instructions or operating rules about how work should be performed.</p></div></div><p>These labels are useful, but the production question is simpler: <strong>what data is persisted, why, for how long, and who may retrieve it?</strong></p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Why not keep every conversation forever?</h2><p>Unlimited history causes context-window pressure, higher token cost, slower requests, stale or contradictory facts, privacy exposure, persistent prompt injection, and poor relevance.</p><blockquote><strong>More memory is not automatically a better agent. Better memory means carrying forward the minimum useful information with explicit ownership and lifecycle rules.</strong></blockquote></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Context window is not memory storage</h2><p>A larger context window lets you send more information to a model. It does not solve persistence, retrieval, correction, deletion, ownership, relevance, or retention. Those are application architecture concerns.</p><div class="warning"><strong>Security note:</strong> long-term memory can persist malicious or sensitive content far beyond the request that introduced it. Treat writes to memory as a trust boundary, not as harmless chat history.</div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Production checklist</h2><p>Before adding durable memory, decide what qualifies for persistence; the user/tenant/project scope; how stale facts are updated; how users inspect, correct, or delete data; how secrets and sensitive information are excluded; how retrieval is authorised; and how retention affects compliance and cost.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Exercise</h2><ol><li>Add a <code>seat_preference</code> and verify it appears in a fresh travel request.</li><li>Add an irrelevant preference such as <code>editor_theme=dark</code>, then change the context builder so travel requests do not receive it.</li><li>Delete the demo user's memory and verify that the next session no longer receives those preferences.</li><li>For a production system you know, classify its data into current state versus durable memory.</li></ol><p>The next lesson is <strong>Planning</strong>: when an agent should decompose a goal, how explicit plans affect control flow, and when planning creates unnecessary complexity.</p></div></section>
+
+</article></main>
+</body>
+</html>
