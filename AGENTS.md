@@ -85,12 +85,31 @@ Lesson 2 established:
 - One bounded tool-use turn is not yet a general agent loop.
 - Direct provider SDKs are used first so the protocol stays visible before later provider abstraction.
 
+Lesson 3 established:
+
+- The model proposes the next action; the application owns the control loop.
+- After each observation, the model can decide to answer or request another action.
+- Working state must preserve protocol history and observations across loop iterations.
+- Agent loops need explicit host-controlled limits such as `max_steps`; avoid unbounded `while True` loops.
+- Tool failures can be returned as observations without surrendering host control.
+- Adding tools should not require hard-coding the decision order into the loop.
+
+Lesson 4 introduces:
+
+- State is what the current run needs; memory is what the application deliberately carries into a future run.
+- Conversation history is only one part of state; host-owned control metadata should remain structured and authoritative outside the model.
+- Most observations are ephemeral working state, not durable memory.
+- Durable memory should be selected, scoped, revisable, and deletable.
+- Memory only affects a model when the application retrieves it and injects relevant context.
+- A large context window is not a substitute for persistence, retrieval, ownership, correction, or deletion.
+- Long-term memory creates additional privacy, security, staleness, and prompt-injection risks.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 3 — The Agent Loop
-- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python
-- Next: Work through the Lesson 3 multi-step travel-assistant notebook, inspect the action/observation trace, and experiment with step-budget exhaustion before moving to Lesson 4 — State and Memory.
+- Current lesson: Lesson 4 — State and Memory
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop
+- Next: Work through the Lesson 4 state-and-memory notebook, compare ephemeral working state with durable travel preferences, then move to Lesson 5 — Planning.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
