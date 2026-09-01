@@ -94,7 +94,7 @@ Lesson 3 established:
 - Tool failures can be returned as observations without surrendering host control.
 - Adding tools should not require hard-coding the decision order into the loop.
 
-Lesson 4 introduces:
+Lesson 4 established:
 
 - State is what the current run needs; memory is what the application deliberately carries into a future run.
 - Conversation history is only one part of state; host-owned control metadata should remain structured and authoritative outside the model.
@@ -104,12 +104,22 @@ Lesson 4 introduces:
 - A large context window is not a substitute for persistence, retrieval, ownership, correction, or deletion.
 - Long-term memory creates additional privacy, security, staleness, and prompt-injection risks.
 
+Lesson 5 introduces:
+
+- Planning is optional orchestration, not a requirement for every agent.
+- A useful plan is a concise external task list, not hidden chain-of-thought.
+- Plans are working state and should have explicit host-owned status.
+- Model-generated plans must be validated before execution.
+- Plans are hypotheses: new observations may justify skipping steps or bounded replanning.
+- Planning adds model calls, latency, state, and failure modes; simple tasks often remain better as reactive loops or deterministic workflows.
+- Planning increases autonomy, not authority.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 4 — State and Memory
-- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop
-- Next: Work through the Lesson 4 state-and-memory notebook, compare ephemeral working state with durable travel preferences, then move to Lesson 5 — Planning.
+- Current lesson: Lesson 5 — Planning
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory
+- Next: Work through the Lesson 5 planning notebook, compare reactive and plan-first behavior, inspect the structured plan, and experiment with bounded replanning before moving to Lesson 6 — Error Handling and Retries.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
