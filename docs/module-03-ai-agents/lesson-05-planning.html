@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 5 — Planning</title>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#24292f;--muted:#6e7781;--line:#d0d7de;--blue:#0969da;--code:#f6f8fa;--warn:#fff8c5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.topin{max-width:1100px;margin:auto;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:var(--blue);text-decoration:none;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-block;background:var(--blue);color:#fff!important;padding:8px 12px;border-radius:7px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px 60px}.notebook{background:var(--paper);border:1px solid var(--line);box-shadow:0 3px 14px rgba(31,35,40,.08)}.nb-head{padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfd}.nb-head h1{margin:0 0 6px;font-size:1.45rem}.nb-head p{margin:0;color:var(--muted)}.cell{display:grid;grid-template-columns:78px 1fr;border-bottom:1px solid #eaeef2}.prompt{padding:18px 10px;text-align:right;color:#8c959f;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}.cell-body{padding:18px 24px;min-width:0}.markdown-cell .cell-body{background:#fff}.code-cell .cell-body{background:#fbfcfd}h1,h2,h3{line-height:1.25}h2{font-size:1.35rem;margin-top:10px}h3{font-size:1.12rem}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.code-cell pre{background:#0d1117;color:#e6edf3;border-color:#30363d}blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f6f8fa}.note{max-width:1100px;margin:0 auto 16px;padding:0 16px;color:var(--muted)}.warning{background:var(--warn);border:1px solid #d4a72c;border-radius:8px;padding:12px 14px}.flow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f6f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre;overflow:auto}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fbfcfd}.status{display:inline-block;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:.8rem;margin-right:6px}@media(max-width:700px){.cell{grid-template-columns:1fr}.prompt{text-align:left;padding:8px 14px;border-bottom:1px solid #eee}.cell-body{padding:16px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="topin"><div><a href="index.html">← Module 03 — AI Agents</a></div><div class="actions"><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/playgrounds/03-ai-agents/planning/lesson-05-planning.ipynb" class="button">Download .ipynb</a><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/playgrounds/03-ai-agents/planning">Open playground</a></div></div></nav>
+<div class="note"><p>This page mirrors the runnable notebook. Planning is kept explicit and inspectable: the model produces a concise task plan, while the host owns execution, status, budgets, and replanning rules.</p></div>
+<main class="wrap"><article class="notebook">
+<header class="nb-head"><h1>Lesson 5 — Planning</h1><p>Module 03 · AI Agents · when to plan, how to represent a plan, and when to replan</p></header>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Why planning exists</h2><p>A reactive agent can decide one action at a time. That is often enough. Planning becomes useful when a goal has several dependencies, expensive actions, ordering constraints, or a need for user review before execution.</p><blockquote><strong>A plan is an explicit, revisable description of intended work — not permission to execute it.</strong></blockquote><p>Planning should not mean asking for hidden chain-of-thought. The useful artifact is a concise external task list: what needs to be done, in what order, and what evidence each step needs.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Reactive loop versus plan-first agent</h2><div class="cards"><div class="card"><h3>Reactive</h3><div class="flow">observe → choose next action → execute → observe → ...</div><p>Good when the next step is obvious from the latest observation and the task is short.</p></div><div class="card"><h3>Plan-first</h3><div class="flow">goal → create plan → execute step → observe → update/replan → ...</div><p>Useful when coordination matters or you need an inspectable picture of intended work.</p></div></div><p>Neither is universally better. Planning adds another model call, more state, and a new failure mode: the agent can become attached to a bad or stale plan.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Theoretical examples</h2><p><strong>Travel:</strong> “Plan a half-day outdoors in Melbourne tomorrow.” A useful plan might check weather, check daylight, choose a time window, then produce an itinerary. If heavy rain is observed, the outdoor plan may need revision.</p><p><strong>Engineering:</strong> “Investigate why checkout latency increased.” A plan might inspect service metrics, compare dependency health, inspect the current deployment, then form a conclusion. If the first observation shows a database incident, several planned steps may become unnecessary.</p><p><strong>When planning is unnecessary:</strong> “What is tomorrow's weather in Melbourne?” Creating a four-step plan before calling one weather tool only adds latency and cost.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>A plan belongs in state</h2><p>Lesson 4 separated working state from durable memory. A plan is normally working state for the current goal. The host should track status deterministically rather than asking the model to remember which steps have completed.</p><div class="flow">Plan
+ ├── step 1  pending → completed
+ ├── step 2  pending → completed
+ ├── step 3  pending → skipped
+ └── step 4  pending → blocked
+
+Observations can cause the plan to change.</div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Main example — plan a Melbourne outdoor half-day</h2><blockquote><strong>Plan a half-day outdoors in Melbourne tomorrow. Check whether the weather is suitable and make sure the suggested time is before sunset.</strong></blockquote><p>We deliberately reuse familiar tools from earlier lessons. The new mechanism is the explicit plan: first create a small task list, then execute it under host control, and replan if evidence invalidates the remaining steps.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>1. Represent plan steps as application data</h3><p>Keep status and execution metadata outside prose so they are inspectable and testable.</p></div></section>
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from dataclasses import dataclass, field
+from typing import Literal
+
+StepStatus = Literal["pending", "completed", "skipped", "blocked"]
+
+@dataclass
+class PlanStep:
+    id: int
+    action: str
+    purpose: str
+    status: StepStatus = "pending"
+    result: str | None = None
+
+@dataclass
+class PlanState:
+    goal: str
+    steps: list[PlanStep] = field(default_factory=list)
+    revision: int = 0
+
+    def pending(self) -> list[PlanStep]:
+        return [step for step in self.steps if step.status == "pending"]</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>2. Ask for a concise external plan</h3><p>The planner returns structured tasks, not private reasoning. We constrain the plan to known actions so the host can validate it.</p></div></section>
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>import json
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+client = OpenAI()
+model = os.getenv("OPENAI_MODEL", "gpt-5.6")
+
+PLAN_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "steps": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "enum": ["get_weather", "get_sun_times", "synthesize"],
+                    },
+                    "purpose": {"type": "string"},
+                },
+                "required": ["action", "purpose"],
+                "additionalProperties": False,
+            },
+        }
+    },
+    "required": ["steps"],
+    "additionalProperties": False,
+}
+
+def create_plan(goal: str) -> PlanState:
+    response = client.responses.create(
+        model=model,
+        instructions=(
+            "Create a concise external execution plan. "
+            "Do not provide hidden reasoning. Use only the allowed actions. "
+            "Use the minimum number of steps needed."
+        ),
+        input=goal,
+        text={"format": {"type": "json_schema", "name": "plan", "schema": PLAN_SCHEMA, "strict": True}},
+    )
+    payload = json.loads(response.output_text)
+    steps = [PlanStep(i + 1, item["action"], item["purpose"]) for i, item in enumerate(payload["steps"])]
+    return PlanState(goal=goal, steps=steps)</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>3. Validate the plan before execution</h3><p>A model-generated plan is untrusted application input. Reject unknown actions and plans that do not end in synthesis.</p></div></section>
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>ALLOWED_ACTIONS = {"get_weather", "get_sun_times", "synthesize"}
+
+def validate_plan(plan: PlanState) -> None:
+    if not plan.steps:
+        raise ValueError("Plan must contain at least one step")
+    if len(plan.steps) > 5:
+        raise ValueError("Plan is too large")
+    if any(step.action not in ALLOWED_ACTIONS for step in plan.steps):
+        raise ValueError("Plan contains an unsupported action")
+    if plan.steps[-1].action != "synthesize":
+        raise ValueError("Plan must end with synthesis")</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>4. Execute one planned step at a time</h3><p>The planner does not execute tools. The host selects the next pending step, calls trusted code, stores the observation, and updates status.</p></div></section>
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>def complete_step(step: PlanStep, result: dict) -> None:
+    step.result = json.dumps(result)
+    step.status = "completed"
+
+# In the runnable notebook, these actions reuse the Open-Meteo
+# weather and sun-time helpers from Lesson 3.
+
+def execute_planned_step(step: PlanStep, *, city: str, target_date: str) -> dict:
+    if step.action == "get_weather":
+        return get_weather(city, target_date)
+    if step.action == "get_sun_times":
+        return get_sun_times(city, target_date)
+    raise ValueError(f"{step.action} is not an executable tool step")</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Replanning: treat the plan as a hypothesis</h2><p>Suppose the first weather observation reports severe rain. A rigid planner might continue checking sunset and constructing an outdoor itinerary anyway. A better system asks whether the remaining plan is still useful.</p><blockquote><strong>Plan → execute → observe → validate the plan → continue or revise.</strong></blockquote><p>Replanning does not mean regenerating a plan after every tool call. Only replan when evidence materially invalidates assumptions or makes remaining work unnecessary.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>def should_replan(observations: list[dict]) -> bool:
+    for observation in observations:
+        rain = observation.get("precipitation_probability_max_percent")
+        if rain is not None and rain >= 80:
+            return True
+    return False</code></pre><p>This rule is intentionally deterministic so the replanning trigger is visible. In more ambiguous domains, the model may recommend replanning, but the host can still enforce when replanning is allowed and how often it may happen.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Plan-execute-replan pattern</h2><div class="flow">goal
+ ↓
+create concise plan
+ ↓
+validate plan
+ ↓
+execute next step
+ ↓
+record observation + status
+ ↓
+remaining plan still valid?
+ ├── yes → next step
+ └── no  → revise plan (bounded)
+ ↓
+final synthesis</div><p>The plan is now another piece of state. It improves inspectability, but also increases orchestration complexity.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Planning failure modes</h2><div class="cards"><div class="card"><h3>Over-planning</h3><p>A simple one-tool goal gets an unnecessary five-step plan, adding tokens and latency.</p></div><div class="card"><h3>Stale plans</h3><p>New evidence invalidates assumptions, but the agent keeps executing obsolete steps.</p></div><div class="card"><h3>Too much granularity</h3><p>Every trivial operation becomes its own step, making plans noisy and expensive to maintain.</p></div><div class="card"><h3>Plan as authority</h3><p>The application treats model-generated steps as permission to execute dangerous actions.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>When should you use planning?</h2><p>Planning is a good fit when the task has meaningful dependencies, expensive or irreversible actions, a need for progress visibility, user approval, or several independent information-gathering steps. Prefer a reactive loop or deterministic workflow when the task is short, the sequence is already known, or planning would simply restate application logic.</p><div class="warning"><strong>Production principle:</strong> planning increases autonomy but does not transfer authority. Validate plans exactly as you validate tool calls.</div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Exercise</h2><ol><li>Run the planner for the Melbourne half-day goal and inspect whether every step is genuinely necessary.</li><li>Change the goal to “What is tomorrow's Melbourne weather?” and see whether the planner over-plans. Tighten the planning instruction if needed.</li><li>Force a high-rain observation and mark remaining outdoor-only work as skipped or generate one bounded revision.</li><li>Adapt the same planning state to an engineering goal such as investigating service latency. Keep the action names abstract and inspectable.</li></ol><p>The next lesson is <strong>Error Handling and Retries</strong>: provider failures, tool failures, retryability, backoff, idempotency, and how an agent should observe failure without turning every error into another uncontrolled action.</p></div></section>
+
+</article></main>
+</body>
+</html>
