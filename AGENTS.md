@@ -76,12 +76,21 @@ Lesson 1 established these durable concepts:
 - Autonomy is a spectrum; use the minimum autonomy needed.
 - RAG can be one capability or tool available to an agent.
 
+Lesson 2 established:
+
+- Tool definitions are contracts shown to the model, not direct executable access.
+- The model proposes actions; the host validates, authorises, dispatches, and executes them.
+- Model-generated arguments and tool results both cross trust boundaries.
+- `call_id` correlates a tool request with its observation.
+- One bounded tool-use turn is not yet a general agent loop.
+- Direct provider SDKs are used first so the protocol stays visible before later provider abstraction.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 2 — Tool Calling from Scratch in Python
-- Completed: Lesson 1 — What is an AI Agent?
-- Next: Complete the Lesson 2 tool-calling exercise and inspect its protocol trace before introducing the iterative agent loop in Lesson 3.
+- Current lesson: Lesson 3 — The Agent Loop
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python
+- Next: Work through the Lesson 3 multi-step travel-assistant notebook, inspect the action/observation trace, and experiment with step-budget exhaustion before moving to Lesson 4 — State and Memory.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
@@ -98,7 +107,11 @@ When a useful experiment is completed, consider whether it contains durable lear
 
 ## Documentation rules
 
-The high-level course map lives at `docs/AI_Engineering_Course_Map_2026_07_29.html`. Detailed module material belongs in a dedicated folder such as `docs/module-03-ai-agents/`; its `index.html` is the module landing/training page, with lesson-specific pages and assets added only if the module outgrows one page.
+The high-level course map lives at `docs/AI_Engineering_Course_Map_2026_07_29.html`. Detailed module material belongs in a dedicated folder such as `docs/module-03-ai-agents/`.
+
+The module `index.html` is a concise learning map: it should explain each lesson's core concepts, give a short briefing for examples, and link to the detailed lesson exercise. Do not duplicate a long notebook/code walkthrough inside the module index.
+
+Detailed hands-on lessons should use a dedicated browser page such as `lesson-03-agent-loop.html`. That page mirrors the runnable notebook and is where the full teaching walkthrough belongs.
 
 Update documentation incrementally when work creates durable value, such as:
 
@@ -110,37 +123,24 @@ Update documentation incrementally when work creates durable value, such as:
 
 Do not turn every chat or coding session into documentation. Keep the course concise enough to remain a useful long-term reference.
 
-### Lesson pages must be followable on their own
+### Detailed lesson pages must be followable on their own
 
-A module page is not an index that points at code. A reader should be able to follow the
-whole lesson in the browser without opening an editor.
+A lesson-specific HTML page should let a reader follow the whole exercise in the browser without opening an editor.
 
-- Walk through the implementation **in the page**, as the sequence of cells the notebook
-  runs: a short explanation, then the actual cell code, then what its output shows.
-- Use the real code from the notebook, not paraphrased pseudo-code, and keep the two in the
-  same order so a reader can move between them without losing their place.
-- Show representative output where the output is the point, such as a tool request, a
-  trace, or an error path.
-- Then link to the notebook in the repository as the runnable companion, using the absolute
-  GitHub URL form described above. The link accompanies the explanation; it does not
-  replace it.
-- Elide genuinely uninteresting scaffolding, such as long import blocks or fixture data, so
-  the page stays readable. The notebook remains the complete version.
-
-The Lesson 2 section of `docs/module-03-ai-agents/index.html` is the reference example of
-this shape: numbered steps, each with the real code and the reason it exists, ending with
-the command to run and what the output should look like.
+- Mirror the notebook sequence: short explanation, actual cell code, then what its output demonstrates.
+- Use the real notebook code, not unrelated pseudo-code, and keep the browser page and notebook in the same conceptual order.
+- Show representative output where the trace or failure path is the lesson.
+- Link to the real notebook as the runnable companion.
+- Elide genuinely uninteresting scaffolding when that keeps the browser page readable; the notebook remains the complete runnable artifact.
+- The Module 03 Lesson 2 and Lesson 3 dedicated HTML pages are the reference pattern for this approach.
 
 When editing documentation:
 
 - Preserve the existing visual style.
 - Keep links between the course map, module pages, and examples valid.
-- Use relative links **only between pages inside `docs/`**. GitHub Pages publishes `docs/` as
-  the site root (see `.github/workflows/publish-docs.yml`), so a relative link that escapes it,
-  such as `../../playgrounds/...`, works locally but returns 404 on the published site.
-- Link to code outside `docs/` with an absolute GitHub URL, for example
-  `https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/playgrounds/<name>`.
-  A directory URL is usually the best target because GitHub renders its `README.md`.
+- Use relative links only between pages inside `docs/`.
+- GitHub Pages publishes `docs/` as the site root, so relative links that escape `docs/` will fail on the published site.
+- Link to code/notebooks outside `docs/` with an absolute GitHub URL. Use a raw GitHub URL when the intended action is to download a notebook.
 - Keep HTML self-contained unless shared assets clearly improve maintainability.
 - Do not rewrite unrelated content.
 - Check both narrow and wide layouts when making material visual changes.
@@ -161,8 +161,7 @@ Do not create empty directories for appearance. A lesson may begin with a focuse
 
 ### Playgrounds and examples are notebook-first
 
-Hands-on material is written as Jupyter notebooks. A notebook interleaves explanation, a
-small runnable cell, and its output, which is how this course is meant to be followed.
+Hands-on material is written as Jupyter notebooks. A notebook interleaves explanation, a small runnable cell, and its output, which is how this course is meant to be followed.
 
 Playgrounds are grouped by module, and the whole course shares one environment:
 
@@ -170,33 +169,23 @@ Playgrounds are grouped by module, and the whole course shares one environment:
 playgrounds/
     requirements.txt             # shared by every playground; one venv for the course
     <nn>-<module-name>/          # e.g. 03-ai-agents
-        <topic>/                 # e.g. tool-calling-from-scratch
+        <topic>/                 # e.g. tool-calling-from-scratch or agent-loop
             <topic>.ipynb        # primary teaching surface: narrative + runnable cells
             <topic>.py           # optional: logic worth importing, testing, or running headless
             test_<topic>.py      # tests import the .py module, never the notebook
             README.md            # how to run it, and what to observe
 ```
 
-There is no per-playground `requirements.txt`. When a lesson needs a new dependency, add it
-to `playgrounds/requirements.txt` with a comment naming what needs it, so a reader who set up
-the environment in Lesson 2 can still run Lesson 9.
+There is no per-playground `requirements.txt`. When a lesson needs a new dependency, add it to `playgrounds/requirements.txt` with a comment naming what needs it, so a reader who set up the environment in Lesson 2 can still run later lessons.
 
 Conventions:
 
-- The notebook is the artifact a reader opens first. Order its cells to build up the
-  mechanism step by step, with a markdown cell before each code cell explaining what the
-  next cell demonstrates and what to look for in the output.
+- The notebook is the artifact a reader opens first. Order its cells to build up the mechanism step by step, with a markdown cell before each code cell explaining what the next cell demonstrates and what to look for in the output.
 - Keep cells small enough to reason about in isolation. One idea per cell.
-- When logic deserves tests or reuse, factor it into a sibling `.py` module and have the
-  notebook import it. Do not duplicate the same implementation in both places, and do not
-  try to unit-test notebook cells.
-- Notebooks read configuration from `.env` like any other code. Never hardcode a key, and
-  never commit a notebook whose stored output contains a key, token, or personal data.
-- Committing outputs is encouraged when they *are* the lesson — a visible tool call, a
-  request/response trace, a token count. Clear outputs that are merely noisy, enormous, or
-  nondeterministic churn.
-- A plain `.py` script is still the right choice when a piece is genuinely a program rather
-  than a lesson, such as a project entry point or a test suite.
+- When logic deserves tests or reuse, factor it into a sibling `.py` module and have the notebook import it. Do not duplicate the same implementation in both places, and do not try to unit-test notebook cells.
+- Notebooks read configuration from `.env` like any other code. Never hardcode a key, and never commit a notebook whose stored output contains a key, token, or personal data.
+- Committing outputs is encouraged when they are the lesson — a visible tool call, a request/response trace, a token count. Clear outputs that are merely noisy, enormous, or nondeterministic churn.
+- A plain `.py` script is still the right choice when a piece is genuinely a program rather than a lesson, such as a project entry point or a test suite.
 
 ## Engineering standards
 
