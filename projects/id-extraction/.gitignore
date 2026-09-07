@@ -1,0 +1,32 @@
+.venv/
+.runtime/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+private/
+results/
+*.pyc
+
+# Document inputs must stay local even when saved outside private/.
+*.[jJ][pP][gG]
+*.[jJ][pP][eE][gG]
+*.[pP][nN][gG]
+*.[wW][eE][bB][pP]
+*.[pP][dD][fF]
+*.[tT][iI][fF]
+*.[tT][iI][fF][fF]
+*.[hH][eE][iI][cC]
+*.[hH][eE][iI][fF]
+*.[bB][mM][pP]
+!examples/blank.png
+!examples/synthetic-passport.png
+
+# Extraction reports, diagnostic responses and local data stores
+*.jsonl
+*.result.json
+*-results.json
+*-raw.json
+*.raw.json
+*.sqlite
+*.sqlite3
+*.db

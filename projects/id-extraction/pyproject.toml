@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-id-extractor"
+version = "0.1.0"
+description = "Local, validated identity-document extraction"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.12,<3", "Pillow>=12,<13"]
+
+[project.optional-dependencies]
+test = ["pytest>=9,<10"]
+
+[project.scripts]
+id-extract = "local_id_extractor.cli:main"
+id-benchmark = "local_id_extractor.benchmark:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

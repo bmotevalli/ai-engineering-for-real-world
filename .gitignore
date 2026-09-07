@@ -3,6 +3,22 @@
 .env.*
 !.env.example
 
+# Credential stores and private key material
+.ssh/
+.aws/
+.netrc
+.pypirc
+credentials.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Local logs may contain requests, responses or credentials
+*.log
+
 # Python
 __pycache__/
 *.py[cod]
@@ -25,3 +41,11 @@ build/
 Thumbs.db
 .idea/
 .vscode/
+
+# Local ID extraction data and model runtime
+projects/id-extraction/.runtime/
+projects/id-extraction/private/
+projects/id-extraction/results/
+# Workspace-local assistant metadata
+.agents/
+.codex/
