@@ -55,6 +55,22 @@ def test_unicode_leading_zero_and_low_confidence_preserved():
     assert result.passport_number.value == "0012345"
 
 
+def test_document_type_is_normalized_without_losing_unknown_label():
+    data = payload()
+    data["document_type"] = {"value": "Driver's Licence", "confidence": 0.8}
+    assert ExtractionResult.model_validate(data).document_type.value == "driver_license"
+    data["document_type"] = {"value": "residence permit", "confidence": 0.6}
+    result = ExtractionResult.model_validate(data)
+    assert result.document_type.value == "other"
+    assert result.document_type_description.value == "residence permit"
+
+
+def test_address_may_contain_line_breaks():
+    data = payload()
+    data["address"] = {"value": "12 Example Street\nPERTH WA 6000", "confidence": 0.8}
+    assert "PERTH" in ExtractionResult.model_validate(data).address.value
+
+
 @pytest.mark.parametrize("raw", ['{"x":1,"x":2}', '```json\n{}\n```', '{} trailing'])
 def test_strict_json(raw):
     with pytest.raises(ValueError):

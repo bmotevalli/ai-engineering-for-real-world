@@ -148,7 +148,7 @@ Each key contains exactly `value` and `confidence`:
 * `value`: nonempty string up to 1024 characters, or `null`. No implicit numeric
   coercion, whitespace-only values, control characters or extra properties.
 * `confidence`: finite JSON number in `[0,1]`; strings and booleans are rejected.
-* `document_type`: `driver_licence`, `passport`, or null.
+* `document_type`: `driver_license`, `passport`, `other`, or null. Unexpected model labels are normalized to `other` and preserved in `document_type_description`.
 * Dates: real Gregorian calendar dates in `YYYY-MM-DD`, or null. Ambiguous date
   order, centuries or calendar conversion should yield null. Raw date evidence is
   not retained in this minimal schema.

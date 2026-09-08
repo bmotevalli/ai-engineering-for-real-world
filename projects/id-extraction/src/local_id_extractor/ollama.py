@@ -3,6 +3,7 @@ import base64
 import json
 import urllib.error
 import urllib.request
+from urllib.parse import urlparse
 
 from .extractor import ExtractionError
 
@@ -11,13 +12,18 @@ ALLOWED_MODELS = (DEFAULT_MODEL, "qwen3-vl:8b", "qwen3.5:4b-q4_K_M")
 
 
 class OllamaBackend:
-    def __init__(self, model: str = DEFAULT_MODEL, *, timeout: float = 600, context_length: int = 4096):
+    def __init__(self, model: str = DEFAULT_MODEL, *, timeout: float = 600,
+                 context_length: int = 4096, base_url: str = "http://127.0.0.1:11434"):
         if model not in ALLOWED_MODELS:
             raise ValueError("model is not in the local allowlist")
         self.model = model
         if type(context_length) is not int or context_length not in (4096, 8192):
             raise ValueError("context length must be 4096 or 8192")
         self.context_length = context_length
+        parsed = urlparse(base_url)
+        if parsed.scheme != "http" or parsed.username or parsed.password or parsed.path not in ("", "/"):
+            raise ValueError("Ollama base URL must be a plain HTTP origin")
+        self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         # No environment proxies or HTTP redirects; images cannot be forwarded.
         class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -27,7 +33,7 @@ class OllamaBackend:
 
     def request(self, path: str, body: dict | None = None) -> dict:
         request = urllib.request.Request(
-            "http://127.0.0.1:11434/api/" + path,
+            self.base_url + "/api/" + path,
             data=None if body is None else json.dumps(body).encode(),
             headers={"Content-Type": "application/json"},
         )
