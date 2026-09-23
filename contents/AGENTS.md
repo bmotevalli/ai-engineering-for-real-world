@@ -104,7 +104,7 @@ Lesson 4 established:
 - A large context window is not a substitute for persistence, retrieval, ownership, correction, or deletion.
 - Long-term memory creates additional privacy, security, staleness, and prompt-injection risks.
 
-Lesson 5 introduces:
+Lesson 5 established:
 
 - Planning is optional orchestration, not a requirement for every agent.
 - A useful plan is a concise external task list, not hidden chain-of-thought.
@@ -114,12 +114,24 @@ Lesson 5 introduces:
 - Planning adds model calls, latency, state, and failure modes; simple tasks often remain better as reactive loops or deterministic workflows.
 - Planning increases autonomy, not authority.
 
+
+Lesson 6 introduces:
+
+- Failures should be classified before retry policy is applied.
+- Transient provider/network failures may be retried; validation, permission, and many domain failures should normally fail fast.
+- Retry at the narrowest layer that owns the failing operation rather than replaying an entire agent step.
+- Retries need explicit attempt limits, per-request timeouts, backoff, and production jitter.
+- Once recovery is exhausted, return one structured failure observation to the agent.
+- Provider retry budgets, tool retry budgets, and agent step budgets are separate controls.
+- Side-effecting tools require idempotency or status checks before retries are safe.
+- The model may choose what to do after failure, but deterministic host code owns retryability and retry execution.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 5 — Planning
-- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory
-- Next: Work through the Lesson 5 planning notebook, compare reactive and plan-first behavior, inspect the structured plan, and experiment with bounded replanning before moving to Lesson 6 — Error Handling and Retries.
+- Current lesson: Lesson 6 — Error Handling and Retries
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning
+- Next: Work through the Lesson 6 retry notebook, compare transient and permanent failures, inspect structured failure observations, and design idempotency for side-effecting tools before moving to Lesson 7 — Stopping Conditions and Budgets.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
