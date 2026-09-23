@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 6 — Error Handling and Retries</title>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#24292f;--muted:#6e7781;--line:#d0d7de;--blue:#0969da;--code:#f6f8fa;--warn:#fff8c5;--danger:#fff1f0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.topin{max-width:1100px;margin:auto;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:var(--blue);text-decoration:none;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-block;background:var(--blue);color:#fff!important;padding:8px 12px;border-radius:7px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px 60px}.notebook{background:var(--paper);border:1px solid var(--line);box-shadow:0 3px 14px rgba(31,35,40,.08)}.nb-head{padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfd}.nb-head h1{margin:0 0 6px;font-size:1.45rem}.nb-head p{margin:0;color:var(--muted)}.cell{display:grid;grid-template-columns:78px 1fr;border-bottom:1px solid #eaeef2}.prompt{padding:18px 10px;text-align:right;color:#8c959f;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}.cell-body{padding:18px 24px;min-width:0}.markdown-cell .cell-body{background:#fff}.code-cell .cell-body{background:#fbfcfd}h1,h2,h3{line-height:1.25}h2{font-size:1.35rem;margin-top:10px}h3{font-size:1.12rem}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.code-cell pre{background:#0d1117;color:#e6edf3;border-color:#30363d}blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f6f8fa}.note{max-width:1100px;margin:0 auto 16px;padding:0 16px;color:var(--muted)}.warning{background:var(--warn);border:1px solid #d4a72c;border-radius:8px;padding:12px 14px}.danger{background:var(--danger);border:1px solid #ff8182;border-radius:8px;padding:12px 14px}.flow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f6f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre;overflow:auto}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fbfcfd}.tag{display:inline-block;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:.8rem;margin-right:6px}@media(max-width:700px){.cell{grid-template-columns:1fr}.prompt{text-align:left;padding:8px 14px;border-bottom:1px solid #eee}.cell-body{padding:16px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="topin"><div><a href="index.html">← Module 03 — AI Agents</a></div><div class="actions"><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/contents/playgrounds/03-ai-agents/error-handling-and-retries/lesson-06-error-handling-and-retries.ipynb" class="button">Download .ipynb</a><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/contents/playgrounds/03-ai-agents/error-handling-and-retries">Open playground</a></div></div></nav>
+<div class="note"><p>This page mirrors the runnable notebook. The lesson keeps retry decisions in deterministic host code and lets the model observe failures only after the host has exhausted the allowed recovery policy.</p></div>
+<main class="wrap"><article class="notebook">
+<header class="nb-head"><h1>Lesson 6 — Error Handling and Retries</h1><p>Module 03 · AI Agents · classify failures, retry only what is safe, and preserve control</p></header>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Why error handling is part of agent design</h2><p>An agent combines probabilistic model decisions with networks, APIs, databases, and tools. Failures are normal: a provider may rate-limit you, an HTTP call may time out, a tool may reject input, or a domain rule may make the requested action impossible.</p><blockquote><strong>Do not let the model decide whether infrastructure should be retried. The host classifies the failure and applies a bounded recovery policy.</strong></blockquote><p>The model may decide what to do <em>after</em> a failure becomes an observation, but retry mechanics belong to deterministic application code.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>First classify the failure</h2><div class="cards"><div class="card"><h3>Transient infrastructure</h3><p>Timeouts, connection resets, 429 rate limits, and many 5xx responses. Often retryable with a bounded delay.</p></div><div class="card"><h3>Permanent request / validation</h3><p>Malformed arguments, unsupported tool names, invalid dates, schema failures. Retrying the same request usually repeats the same failure.</p></div><div class="card"><h3>Domain failure</h3><p>No seats available, account not eligible, city not found, resource already deleted. The operation worked correctly; the requested outcome is unavailable.</p></div><div class="card"><h3>Permission / authentication</h3><p>401, 403, missing scope, approval required. Blind retries are usually wrong; fix authority or escalate.</p></div></div><p>A useful retry policy starts with a simple question: <strong>is there a realistic chance that repeating the exact same operation shortly will succeed?</strong></p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Where retries belong</h2><div class="flow">agent loop
+  ↓
+model call ────────────── retry provider call here
+  ↓
+tool request
+  ↓
+tool adapter ─────────── retry network/API call here
+  ↓
+business operation ───── do not blindly repeat side effects
+  ↓
+observation
+  ↓
+agent decides again</div><p>Retry at the narrowest layer that owns the failing operation. Retrying the entire agent step because one HTTP request timed out can duplicate model calls, tool calls, or side effects.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 1 — bounded retries around a flaky read-only tool</h2><p>We start with a deterministic simulation so the behavior is reproducible. The operation fails twice with a transient timeout, then succeeds. This is safer to learn from than hoping a real API happens to fail while you watch.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from dataclasses import dataclass
+import time
+from typing import Callable, TypeVar
+
+T = TypeVar("T")
+
+class TransientToolError(RuntimeError):
+    pass
+
+class PermanentToolError(RuntimeError):
+    pass
+
+@dataclass(frozen=True)
+class RetryPolicy:
+    max_attempts: int = 3
+    base_delay_seconds: float = 0.25
+    max_delay_seconds: float = 2.0
+
+def retry_call(
+    operation: Callable[[], T],
+    *,
+    policy: RetryPolicy,
+    is_retryable: Callable[[Exception], bool],
+    sleep: Callable[[float], None] = time.sleep,
+) -> T:
+    for attempt in range(1, policy.max_attempts + 1):
+        try:
+            return operation()
+        except Exception as exc:
+            if not is_retryable(exc) or attempt == policy.max_attempts:
+                raise
+            delay = min(
+                policy.base_delay_seconds * (2 ** (attempt - 1)),
+                policy.max_delay_seconds,
+            )
+            print(f"attempt {attempt} failed: {exc}; retrying in {delay:.2f}s")
+            sleep(delay)
+
+    raise AssertionError("unreachable")</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>Simulate a transient failure</h3><p>Only the exception type marked transient is retryable. The host does not ask the LLM whether to try again.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>attempts = 0
+
+def flaky_weather_lookup() -> dict:
+    global attempts
+    attempts += 1
+    if attempts &lt; 3:
+        raise TransientToolError("weather API timed out")
+    return {"city": "Melbourne", "rain_probability_percent": 35}
+
+result = retry_call(
+    flaky_weather_lookup,
+    policy=RetryPolicy(max_attempts=3, base_delay_seconds=0),
+    is_retryable=lambda exc: isinstance(exc, TransientToolError),
+    sleep=lambda _: None,
+)
+
+print(result)
+print("attempts:", attempts)</code></pre><p>Expected result: the tool succeeds on attempt 3. The retry count is bounded and observable.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Permanent failures must fail fast</h2><p>If the tool receives an invalid date or an unsupported city identifier, waiting 250 ms and sending the same invalid request again does not improve anything.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>attempts = 0
+
+def invalid_request() -> dict:
+    global attempts
+    attempts += 1
+    raise PermanentToolError("target_date must be YYYY-MM-DD")
+
+try:
+    retry_call(
+        invalid_request,
+        policy=RetryPolicy(max_attempts=5, base_delay_seconds=0),
+        is_retryable=lambda exc: isinstance(exc, TransientToolError),
+        sleep=lambda _: None,
+    )
+except PermanentToolError as exc:
+    print("failed immediately:", exc)
+    print("attempts:", attempts)</code></pre><p>Expected result: exactly one attempt.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Backoff and jitter</h2><p>Exponential backoff reduces pressure on a struggling dependency. In production, add a small random jitter so many workers do not retry at exactly the same moments.</p><div class="flow">attempt 1 fails → wait ~0.25s
+attempt 2 fails → wait ~0.50s
+attempt 3 fails → wait ~1.00s
+...
+cap the delay and cap the attempts</div><p>Respect provider hints such as <code>Retry-After</code> when available. A retry policy is a resource policy too: it consumes latency, tokens, requests, and user patience.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 2 — convert final tool failure into an observation</h2><p>After retryable recovery is exhausted, the agent should receive a structured failure observation. That lets the model choose a useful next action without giving it control of the retry loop.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>def run_tool_with_policy(name: str, operation: Callable[[], dict]) -> dict:
+    try:
+        data = retry_call(
+            operation,
+            policy=RetryPolicy(max_attempts=3),
+            is_retryable=lambda exc: isinstance(exc, TransientToolError),
+        )
+        return {"ok": True, "tool": name, "data": data}
+    except PermanentToolError as exc:
+        return {
+            "ok": False,
+            "tool": name,
+            "error": {
+                "kind": "validation",
+                "retryable": False,
+                "message": str(exc),
+            },
+        }
+    except TransientToolError as exc:
+        return {
+            "ok": False,
+            "tool": name,
+            "error": {
+                "kind": "transient_exhausted",
+                "retryable": False,
+                "message": str(exc),
+            },
+        }</code></pre><p>The final observation says retrying at this layer is finished. The model can now answer with a limitation, choose another tool, or ask the user for different input.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Provider calls need their own retry boundary</h2><p>A model API can fail before any tool is selected. Keep provider retries separate from tool retries. With the OpenAI SDK, retryable examples include connection errors, timeouts, rate limits, and some server errors.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from openai import (
+    APIConnectionError,
+    APITimeoutError,
+    InternalServerError,
+    RateLimitError,
+)
+
+RETRYABLE_PROVIDER_ERRORS = (
+    APIConnectionError,
+    APITimeoutError,
+    InternalServerError,
+    RateLimitError,
+)
+
+def call_model_with_retry(client, **kwargs):
+    return retry_call(
+        lambda: client.responses.create(**kwargs),
+        policy=RetryPolicy(max_attempts=3, base_delay_seconds=0.5),
+        is_retryable=lambda exc: isinstance(exc, RETRYABLE_PROVIDER_ERRORS),
+    )</code></pre><p>Do not hide unlimited SDK retries under your own retries. Know which layer retries, and cap the combined behavior.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Side effects change the rules</h2><div class="danger"><strong>Danger:</strong> if a request timed out after the server created a booking, retrying the same call may create a second booking.</div><p>Read-only operations are comparatively easy to retry. Side-effecting operations need idempotency or a way to check whether the first attempt actually succeeded.</p><pre><code>create_booking(
+    trip_id="trip-123",
+    idempotency_key="agent-run-42:step-3"
+)</code></pre><p>For payments, bookings, emails, deployments, and destructive actions, design idempotency before adding retries.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Retry budget versus agent step budget</h2><p>These are different controls. One agent step may contain several low-level retry attempts, but the model should not see every timeout as a new reasoning step.</p><div class="flow">agent step 2
+  └── weather tool
+       ├── HTTP attempt 1 → timeout
+       ├── HTTP attempt 2 → timeout
+       └── HTTP attempt 3 → success
+  ↓
+one observation returned to the agent</div><p>Keep both budgets visible. Otherwise a “5-step agent” can secretly perform dozens of external requests.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Production failure policy</h2><div class="cards"><div class="card"><h3>Bound everything</h3><p>Attempts, total deadline, per-request timeout, tool calls, model steps, and cost.</p></div><div class="card"><h3>Log the classification</h3><p>Record operation, failure kind, attempt number, elapsed time, and final outcome without leaking secrets.</p></div><div class="card"><h3>Preserve cause</h3><p>Return user-safe messages to the model while retaining diagnostics for operators.</p></div><div class="card"><h3>Degrade deliberately</h3><p>Fallback, alternate tool, partial answer, human escalation, or a clear failure may all be better than another retry.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Exercise</h2><ol><li>Change the flaky tool to succeed on attempt 4 while the policy allows only 3 attempts. Inspect the final observation.</li><li>Add an HTTP-status classifier: retry 429 and 5xx, but fail fast on 400, 401, 403, and 404.</li><li>Add jitter while keeping tests deterministic by injecting the random function.</li><li>Design an idempotency key for a hypothetical <code>send_email</code> or <code>create_booking</code> tool.</li><li>Trace a full agent request and count model steps separately from low-level retry attempts.</li></ol><p>The next lesson is <strong>Stopping Conditions and Budgets</strong>: step limits, time limits, token/cost limits, repeated-action detection, and graceful termination.</p></div></section>
+
+</article></main>
+</body>
+</html>
