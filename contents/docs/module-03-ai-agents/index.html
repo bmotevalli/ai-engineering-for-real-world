@@ -82,7 +82,7 @@ final synthesis</code></pre><p>The plan is working state. The host owns allowed 
 </article>
 
 
-<article class="lesson" id="lesson-6"><header><div class="eyebrow" style="color:#2c78b8">Lesson 6 <span class="lesson-status">In progress</span></div><h2>Error Handling and Retries</h2><p class="muted">Classify failures, retry only what is safe, and keep recovery bounded and observable.</p></header>
+<article class="lesson" id="lesson-6"><header><div class="eyebrow" style="color:#2c78b8">Lesson 6 <span class="lesson-status">Completed</span></div><h2>Error Handling and Retries</h2><p class="muted">Classify failures, retry only what is safe, and keep recovery bounded and observable.</p></header>
 <section><h3>Core idea</h3><blockquote class="definition">The host classifies failures and owns retry policy. The model decides what to do only after the host returns a final success or failure observation.</blockquote><p>Agent systems fail at several layers: model providers, networks, tools, validation, permissions, and domain rules. Treating every error as “try again” creates latency, duplicate side effects, and uncontrolled loops.</p></section>
 <section><h3>Classify before retrying</h3><div class="grid-4"><section class="component"><h4>Transient</h4><p>Timeouts, connection resets, rate limits, and many 5xx responses may succeed on a later attempt.</p></section><section class="component"><h4>Validation</h4><p>Malformed tool arguments or unsupported values should normally fail fast rather than repeat unchanged.</p></section><section class="component"><h4>Domain</h4><p>No availability, ineligible account, or missing resource may be a valid business outcome rather than infrastructure failure.</p></section><section class="component"><h4>Permission</h4><p>Authentication, authorisation, or approval failures require changed authority, not blind retries.</p></section></div></section>
 <section><h3>Retry at the narrowest layer</h3><pre class="inline-flow"><code>agent loop
@@ -100,6 +100,34 @@ one final observation returned to the agent</code></pre><p>A low-level HTTP time
 <section><h3>Checkpoint</h3><details><summary>Should the model decide whether a timeout is retryable?</summary><div class="answers"><p>No. Retryability is infrastructure/application policy. The model may decide what to do after the host returns a final failure observation.</p></div></details><details><summary>Are agent step budgets and retry budgets the same?</summary><div class="answers"><p>No. One agent step can contain several low-level attempts. Track and bound both separately so a small reasoning budget cannot hide a large number of external requests.</p></div></details></section>
 </article>
 
-<section class="next"><small>Next lesson</small><h2>Lesson 7 — Stopping Conditions and Budgets</h2><p>We will make termination explicit with step, time, token, cost, and tool-call budgets; detect repeated actions and lack of progress; and stop gracefully when the agent cannot safely continue.</p></section>
+
+<article class="lesson" id="lesson-7"><header><div class="eyebrow" style="color:#2c78b8">Lesson 7 <span class="lesson-status">In progress</span></div><h2>Stopping Conditions and Budgets</h2><p class="muted">Make termination explicit so an agent cannot continue indefinitely just because the model keeps proposing actions.</p></header>
+<section><h3>Core idea</h3><blockquote class="definition">The model may decide that it is finished. The application decides whether it is allowed to continue.</blockquote><p>A final model answer is only one stopping condition. Production agents also need host-controlled ceilings for time, steps, external actions, tokens, cost, repeated actions, lack of progress, and authority boundaries.</p></section>
+<section><h3>Budgets are independent</h3><div class="grid-4"><section class="component"><h4>Steps</h4><p>Bound model decision turns.</p></section><section class="component"><h4>Tool calls</h4><p>Bound external actions separately from reasoning steps.</p></section><section class="component"><h4>Time / cost</h4><p>Enforce wall-clock, token, and spend ceilings.</p></section><section class="component"><h4>Progress</h4><p>Stop obvious repetition and runs that keep consuming resources without adding evidence.</p></section></div><p>A budget is a ceiling, not a target. The agent should stop as soon as the goal is satisfied.</p></section>
+<section><h3>Check before expensive work</h3><pre class="inline-flow"><code>before model call
+  ├── deadline?
+  ├── step budget?
+  └── token / cost budget?
+        ↓
+model decides
+        ↓
+before tool execution
+  ├── tool-call budget?
+  ├── repeated action?
+  └── authority available?
+        ↓
+observation
+        ↓
+progress made?
+        ↓
+continue, complete, or terminate with reason</code></pre></section>
+<section class="example-brief"><span class="example-label">Example 1 · Run budget</span><h3>Track usage across several resource dimensions</h3><p>A deterministic <code>RunBudget</code> defines step, tool, time, token, cost, repetition, and no-progress limits. A separate <code>RunUsage</code> records what the current run has consumed.</p><div class="example-actions"><a class="file-link" href="lesson-07-stopping-conditions-and-budgets.html">Open Lesson 7 notebook-style exercise →</a><a class="file-link secondary" href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/contents/playgrounds/03-ai-agents/stopping-conditions-and-budgets/lesson-07-stopping-conditions-and-budgets.ipynb">Download Lesson 7 notebook ↓</a></div></section>
+<section class="example-brief secondary-example"><span class="example-label">Example 2 · Loop detection</span><h3>Stop repeated actions before wasting another tool call</h3><p>The host fingerprints a tool name plus normalized arguments. Repeated requests can be stopped before execution, while domain-specific progress signals distinguish legitimate polling from a stuck loop.</p></section>
+<section class="example-brief secondary-example"><span class="example-label">Example 3 · Graceful termination</span><h3>Return a structured stop reason instead of losing the run</h3><p>A <code>RunResult</code> distinguishes successful completion from timeout, cost exhaustion, repeated action, no progress, or another host-enforced stop. The caller can then return a partial answer, save a checkpoint, or escalate.</p></section>
+<section><h3>Production principle</h3><div class="callout warning"><strong>Max steps alone is not enough</strong><p>One model step can hide provider retries, several tool calls, or an expensive request. Keep model steps, low-level retries, external actions, time, tokens, and cost visible as separate controls.</p></div></section>
+<section><h3>Checkpoint</h3><details><summary>Should an agent try to use its whole budget?</summary><div class="answers"><p>No. Budgets are upper bounds. Once the goal is satisfied, continuing simply because resources remain is wasteful and can increase risk.</p></div></details><details><summary>Is repeating a tool call always a loop?</summary><div class="answers"><p>No. Polling can be legitimate when observations change. Repetition becomes suspicious when the same action and arguments repeatedly produce no meaningful new state.</p></div></details></section>
+</article>
+
+<section class="next"><small>Next lesson</small><h2>Lesson 8 — Human-in-the-Loop</h2><p>We will add approval checkpoints, escalation, resumable decisions, and explicit human authority around high-impact or ambiguous agent actions.</p></section>
 </main><footer>AI Engineering · Module 03 · AI Agents</footer>
 </body></html>
