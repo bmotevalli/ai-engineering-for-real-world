@@ -1,0 +1,6 @@
+# Only package source enters a build context. No documents, keys, results or weights.
+**
+!pyproject.toml
+!src/
+!src/local_id_extractor/
+!src/local_id_extractor/*.py
