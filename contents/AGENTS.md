@@ -115,7 +115,7 @@ Lesson 5 established:
 - Planning increases autonomy, not authority.
 
 
-Lesson 6 introduces:
+Lesson 6 established:
 
 - Failures should be classified before retry policy is applied.
 - Transient provider/network failures may be retried; validation, permission, and many domain failures should normally fail fast.
@@ -126,12 +126,25 @@ Lesson 6 introduces:
 - Side-effecting tools require idempotency or status checks before retries are safe.
 - The model may choose what to do after failure, but deterministic host code owns retryability and retry execution.
 
+
+Lesson 7 introduces:
+
+- Successful model completion is only one stop condition; host-enforced termination is equally important.
+- Budgets should be tracked independently for model steps, tool calls, wall-clock time, tokens, cost, and progress.
+- Budgets are ceilings, not targets; an agent should stop as soon as its goal is satisfied.
+- Check limits before expensive model calls and again before external tool execution.
+- Repeated-action detection can stop obvious loops before another tool call is executed.
+- Repetition and lack of progress are related but not identical; legitimate polling may repeat actions while state changes.
+- Token/cost usage is application-owned accounting; strict ceilings may require pre-call reservation or estimation and post-call reconciliation.
+- Stop reasons should be structured outcomes so callers can distinguish completion, timeout, budget exhaustion, loop detection, or another termination cause.
+- Graceful termination may return a partial result, create a resumable checkpoint, escalate, or fail clearly.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 6 — Error Handling and Retries
-- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning
-- Next: Work through the Lesson 6 retry notebook, compare transient and permanent failures, inspect structured failure observations, and design idempotency for side-effecting tools before moving to Lesson 7 — Stopping Conditions and Budgets.
+- Current lesson: Lesson 7 — Stopping Conditions and Budgets
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries
+- Next: Work through the Lesson 7 budget notebook, integrate the policy with the earlier agent loop, test repeated-action and time-budget termination, then move to Lesson 8 — Human-in-the-Loop.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
