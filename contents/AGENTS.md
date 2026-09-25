@@ -127,7 +127,7 @@ Lesson 6 established:
 - The model may choose what to do after failure, but deterministic host code owns retryability and retry execution.
 
 
-Lesson 7 introduces:
+Lesson 7 established:
 
 - Successful model completion is only one stop condition; host-enforced termination is equally important.
 - Budgets should be tracked independently for model steps, tool calls, wall-clock time, tokens, cost, and progress.
@@ -139,12 +139,25 @@ Lesson 7 introduces:
 - Stop reasons should be structured outcomes so callers can distinguish completion, timeout, budget exhaustion, loop detection, or another termination cause.
 - Graceful termination may return a partial result, create a resumable checkpoint, escalate, or fail clearly.
 
+
+Lesson 8 introduces:
+
+- Human-in-the-loop is an explicit authority/judgment boundary, not a requirement to review every agent step.
+- Common patterns include approval before action, clarification, escalation, and review-before-publication/execution.
+- A human approval should bind to an exact validated proposal rather than grant vague blanket permission.
+- Deterministic host policy should decide when approval is required; the model should not self-authorise.
+- Long-lived approval waits should persist a checkpoint and return a waiting state rather than keep an in-memory loop blocked.
+- Approval outcomes include approve, deny, and modify; modification should create a new proposal instead of mutating an approved one.
+- Revalidate current state, permissions, expiry, and important external facts after approval and before side effects.
+- Human review does not replace authentication, validation, tenant isolation, hard policy, idempotency, or other deterministic safety controls.
+- Approval records need scope, identity, auditability, and often expiry.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 7 — Stopping Conditions and Budgets
-- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries
-- Next: Work through the Lesson 7 budget notebook, integrate the policy with the earlier agent loop, test repeated-action and time-budget termination, then move to Lesson 8 — Human-in-the-Loop.
+- Current lesson: Lesson 8 — Human-in-the-Loop
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries; Lesson 7 — Stopping Conditions and Budgets
+- Next: Work through the Lesson 8 approval notebook, test exact-proposal binding and pause/resume semantics, design an approval view for a production rollback, then move to Lesson 9 — Deterministic Workflows vs Agents.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
