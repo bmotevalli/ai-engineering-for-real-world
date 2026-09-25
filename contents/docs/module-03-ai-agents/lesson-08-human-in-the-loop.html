@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 8 — Human-in-the-Loop</title>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#24292f;--muted:#6e7781;--line:#d0d7de;--blue:#0969da;--code:#f6f8fa;--warn:#fff8c5;--danger:#fff1f0;--ok:#dafbe1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.topin{max-width:1100px;margin:auto;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:var(--blue);text-decoration:none;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-block;background:var(--blue);color:#fff!important;padding:8px 12px;border-radius:7px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px 60px}.notebook{background:var(--paper);border:1px solid var(--line);box-shadow:0 3px 14px rgba(31,35,40,.08)}.nb-head{padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfd}.nb-head h1{margin:0 0 6px;font-size:1.45rem}.nb-head p{margin:0;color:var(--muted)}.cell{display:grid;grid-template-columns:78px 1fr;border-bottom:1px solid #eaeef2}.prompt{padding:18px 10px;text-align:right;color:#8c959f;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}.cell-body{padding:18px 24px;min-width:0}.markdown-cell .cell-body{background:#fff}.code-cell .cell-body{background:#fbfcfd}h1,h2,h3{line-height:1.25}h2{font-size:1.35rem;margin-top:10px}h3{font-size:1.12rem}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.code-cell pre{background:#0d1117;color:#e6edf3;border-color:#30363d}blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f6f8fa}.note{max-width:1100px;margin:0 auto 16px;padding:0 16px;color:var(--muted)}.warning{background:var(--warn);border:1px solid #d4a72c;border-radius:8px;padding:12px 14px}.danger{background:var(--danger);border:1px solid #ff8182;border-radius:8px;padding:12px 14px}.flow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f6f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre;overflow:auto}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fbfcfd}.tag{display:inline-block;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:.8rem;margin-right:6px}@media(max-width:700px){.cell{grid-template-columns:1fr}.prompt{text-align:left;padding:8px 14px;border-bottom:1px solid #eee}.cell-body{padding:16px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="topin"><div><a href="index.html">← Module 03 — AI Agents</a></div><div class="actions"><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/contents/playgrounds/03-ai-agents/human-in-the-loop/lesson-08-human-in-the-loop.ipynb" class="button">Download .ipynb</a><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/contents/playgrounds/03-ai-agents/human-in-the-loop">Open playground</a></div></div></nav>
+<div class="note"><p>This page mirrors the runnable notebook. The examples use deterministic simulated actions so you can inspect approval boundaries without performing a real purchase or production change.</p></div>
+<main class="wrap"><article class="notebook">
+<header class="nb-head"><h1>Lesson 8 — Human-in-the-Loop</h1><p>Module 03 · AI Agents · pause, review, approve, deny, modify, and resume safely</p></header>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Human-in-the-loop is an authority boundary</h2><p>An agent may understand a goal, gather evidence, and propose a sensible action. That does not mean it should be allowed to execute every action autonomously.</p><blockquote><strong>The model can recommend or propose. Human approval grants authority for a specific action.</strong></blockquote><p>This is most useful where mistakes have meaningful consequences: spending money, sending external communications, changing production, deleting data, publishing content, or acting under uncertainty.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>There is more than one human-in-the-loop pattern</h2><div class="cards"><div class="card"><h3>Approval before action</h3><p>Pause before a side effect such as a booking, payment, deployment, email, or delete.</p></div><div class="card"><h3>Clarification</h3><p>Ask the user when required information or intent is ambiguous rather than guessing.</p></div><div class="card"><h3>Escalation</h3><p>Hand off when confidence, permissions, risk, or domain policy requires a human decision.</p></div><div class="card"><h3>Review after drafting</h3><p>Let the agent prepare an artifact but require a person to review before publication or execution.</p></div></div><p>The common design idea is not “put a human everywhere.” It is to identify where human judgment or authority materially improves safety and correctness.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Approval should bind to an exact proposal</h2><p>A weak system asks “Do you approve?” and later executes whatever action currently happens to be in state. A stronger system shows the exact tool, arguments, cost, and consequences, then binds the approval to that exact proposal.</p><div class="flow">agent proposes action
+       ↓
+host validates proposal
+       ↓
+risk policy says approval required
+       ↓
+create approval request for exact action
+       ↓
+PAUSE / persist checkpoint
+       ↓
+human approves | denies | modifies
+       ↓
+revalidate exact proposal + current state
+       ↓
+execute or return decision to agent</div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Theoretical examples</h2><p><strong>Travel:</strong> the assistant may search hotels autonomously, but a non-refundable A$310 booking requires approval before purchase.</p><p><strong>Email:</strong> the agent may draft a reply, but sending it externally requires approval if the message is consequential.</p><p><strong>Engineering:</strong> an incident agent may inspect logs and recommend a rollback, but production rollback remains gated by a human or an existing change-management policy.</p><p><strong>Clarification:</strong> “Book me a flight to Sydney next Friday” is incomplete if the departure city or acceptable price range is unknown. Asking is safer than inventing.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 1 — represent the proposed action explicitly</h2><p>The agent does not call <code>book_hotel</code> directly. It creates an application-owned proposal that can be inspected and fingerprinted.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from dataclasses import dataclass, field
+from enum import Enum
+import hashlib
+import json
+from typing import Any
+
+class RiskLevel(str, Enum):
+    LOW = "low"
+    HIGH = "high"
+
+@dataclass(frozen=True)
+class ActionProposal:
+    tool: str
+    arguments: dict[str, Any]
+    summary: str
+    risk: RiskLevel
+
+def proposal_fingerprint(proposal: ActionProposal) -> str:
+    payload = {
+        "tool": proposal.tool,
+        "arguments": proposal.arguments,
+    }
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+proposal = ActionProposal(
+    tool="book_hotel",
+    arguments={
+        "city": "Melbourne",
+        "hotel": "Harbour View",
+        "nights": 1,
+        "total_aud": 310,
+        "refundable": False,
+    },
+    summary="Book one non-refundable night for A$310.",
+    risk=RiskLevel.HIGH,
+)
+
+print(proposal_fingerprint(proposal)[:12])</code></pre><p>The fingerprint is not an authorization mechanism by itself. It is a simple way to bind a recorded decision to the exact tool arguments that were reviewed.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Risk policy belongs to the host</h2><p>Do not ask the model whether its own action needs approval. Use deterministic policy where possible.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>READ_ONLY_TOOLS = {"search_hotels", "get_weather", "get_sun_times"}
+SIDE_EFFECT_TOOLS = {"book_hotel", "send_email", "deploy_release", "delete_record"}
+
+def requires_approval(proposal: ActionProposal) -> bool:
+    if proposal.tool in SIDE_EFFECT_TOOLS:
+        return True
+    if proposal.risk == RiskLevel.HIGH:
+        return True
+    return False
+
+print(requires_approval(proposal))</code></pre><p>In production the policy may also consider cost thresholds, user role, tenant policy, environment, reversibility, data sensitivity, or previous delegated authority.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 2 — create a resumable approval request</h2><p>An approval is application state. It needs an identifier, proposal fingerprint, lifecycle status, and enough context for a person to decide.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>class ApprovalStatus(str, Enum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    DENIED = "denied"
+
+@dataclass
+class ApprovalRequest:
+    id: str
+    proposal: ActionProposal
+    proposal_hash: str
+    status: ApprovalStatus = ApprovalStatus.PENDING
+    decided_by: str | None = None
+    note: str | None = None
+
+def create_approval_request(request_id: str, proposal: ActionProposal) -> ApprovalRequest:
+    if not requires_approval(proposal):
+        raise ValueError("This proposal does not require approval")
+    return ApprovalRequest(
+        id=request_id,
+        proposal=proposal,
+        proposal_hash=proposal_fingerprint(proposal),
+    )
+
+approval = create_approval_request("approval-001", proposal)
+approval</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Pause means stop executing, not block a thread forever</h2><p>A production agent may wait minutes, hours, or days for approval. Do not keep an in-memory Python loop sleeping until a person clicks a button. Persist the checkpoint and return a status such as <code>WAITING_FOR_APPROVAL</code>.</p><div class="flow">running agent
+  ↓
+approval required
+  ↓
+persist:
+  - goal
+  - current state
+  - exact proposal
+  - approval request
+  - budgets / expiry
+  ↓
+return WAITING_FOR_APPROVAL
+
+...later...
+
+decision arrives
+  ↓
+load checkpoint
+  ↓
+revalidate
+  ↓
+resume</div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Approve, deny, and modify are different outcomes</h2><p>Approval should not be the only human response. A person may deny the action or ask for a modified proposal, such as a refundable room under A$250.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>def decide(
+    request: ApprovalRequest,
+    *,
+    status: ApprovalStatus,
+    decided_by: str,
+    note: str | None = None,
+) -> None:
+    if request.status != ApprovalStatus.PENDING:
+        raise ValueError("Approval request has already been decided")
+    request.status = status
+    request.decided_by = decided_by
+    request.note = note
+
+decide(
+    approval,
+    status=ApprovalStatus.DENIED,
+    decided_by="demo-user",
+    note="Find a refundable option under A$250.",
+)
+
+print(approval.status, approval.note)</code></pre><p>A modification is usually represented as a denial plus new constraints. The agent then creates a <strong>new proposal</strong> and, if needed, a new approval request. Do not silently mutate an already approved action.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 3 — execute only the approved proposal</h2><p>Before execution, re-check that the proposal still matches the one that was approved and that the approval is valid.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>def simulated_book_hotel(arguments: dict[str, Any]) -> dict[str, Any]:
+    # Simulation only: no real booking is performed.
+    return {
+        "booking_id": "SIM-1234",
+        "status": "booked",
+        **arguments,
+    }
+
+def execute_approved(
+    request: ApprovalRequest,
+    proposal_to_execute: ActionProposal,
+) -> dict[str, Any]:
+    if request.status != ApprovalStatus.APPROVED:
+        raise PermissionError("Action has not been approved")
+    if proposal_fingerprint(proposal_to_execute) != request.proposal_hash:
+        raise PermissionError("Proposal changed after approval")
+    if proposal_to_execute.tool != "book_hotel":
+        raise ValueError("Unsupported demo action")
+    return simulated_book_hotel(proposal_to_execute.arguments)</code></pre><p>Even after approval, production systems should revalidate current conditions: price, inventory, permissions, environment, expiry, and any facts that may have changed while waiting.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Approval has scope and expiry</h2><div class="cards"><div class="card"><h3>Exact action</h3><p>“Approve this A$310 booking” should not become “approve any travel purchase.”</p></div><div class="card"><h3>Identity</h3><p>Record who approved and whether that person had authority to approve.</p></div><div class="card"><h3>Time</h3><p>Approval may expire. A price or deployment state can change while the agent is paused.</p></div><div class="card"><h3>Context</h3><p>Environment, tenant, account, resource version, or change ticket may be part of the approval boundary.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Human review is not a substitute for deterministic safety</h2><div class="danger"><strong>Do not send every unsafe proposal to a human.</strong> Invalid, disallowed, or unauthorised actions should be rejected by policy before an approval request is created.</div><p>Approval sits <em>after</em> validation and policy checks. A human should review a meaningful, allowed proposal—not compensate for missing authentication, schema validation, tenant isolation, or hard safety rules.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>What the human should see</h2><p>An approval UI should make the decision understandable without reading hidden prompts or raw traces. Show the proposed action, important arguments, side effects, cost or scope, relevant evidence, why approval is required, and clear approve/deny controls. For high-impact actions, make consequences explicit.</p><p>For an engineering rollback, for example: service, environment, version, expected impact, evidence, change/ticket reference, and rollback target are more useful than “Agent wants to call <code>rollback_service</code>.”</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Exercise</h2><ol><li>Approve the hotel proposal and execute the simulated booking.</li><li>After approval, change <code>total_aud</code> from 310 to 340. Verify the fingerprint check blocks execution.</li><li>Add an <code>expires_at</code> field and reject stale approvals.</li><li>Change the example to <code>send_email</code>: allow drafting automatically but require approval before send.</li><li>Design an engineering approval request for a production rollback. Decide which fields a reviewer must see.</li><li>Return a <code>WAITING_FOR_APPROVAL</code> checkpoint instead of keeping the agent loop alive.</li></ol><p>The next lesson is <strong>Deterministic Workflows vs Agents</strong>: deciding where model autonomy adds value and where ordinary application control flow is the better design.</p></div></section>
+
+</article></main>
+</body>
+</html>
