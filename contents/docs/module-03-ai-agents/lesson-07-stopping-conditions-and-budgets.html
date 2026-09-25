@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 7 — Stopping Conditions and Budgets</title>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#24292f;--muted:#6e7781;--line:#d0d7de;--blue:#0969da;--code:#f6f8fa;--warn:#fff8c5;--danger:#fff1f0;--ok:#dafbe1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.topin{max-width:1100px;margin:auto;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:var(--blue);text-decoration:none;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-block;background:var(--blue);color:#fff!important;padding:8px 12px;border-radius:7px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px 60px}.notebook{background:var(--paper);border:1px solid var(--line);box-shadow:0 3px 14px rgba(31,35,40,.08)}.nb-head{padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfd}.nb-head h1{margin:0 0 6px;font-size:1.45rem}.nb-head p{margin:0;color:var(--muted)}.cell{display:grid;grid-template-columns:78px 1fr;border-bottom:1px solid #eaeef2}.prompt{padding:18px 10px;text-align:right;color:#8c959f;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}.cell-body{padding:18px 24px;min-width:0}.markdown-cell .cell-body{background:#fff}.code-cell .cell-body{background:#fbfcfd}h1,h2,h3{line-height:1.25}h2{font-size:1.35rem;margin-top:10px}h3{font-size:1.12rem}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.code-cell pre{background:#0d1117;color:#e6edf3;border-color:#30363d}blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f6f8fa}.note{max-width:1100px;margin:0 auto 16px;padding:0 16px;color:var(--muted)}.warning{background:var(--warn);border:1px solid #d4a72c;border-radius:8px;padding:12px 14px}.danger{background:var(--danger);border:1px solid #ff8182;border-radius:8px;padding:12px 14px}.flow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f6f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre;overflow:auto}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fbfcfd}.tag{display:inline-block;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:.8rem;margin-right:6px}@media(max-width:700px){.cell{grid-template-columns:1fr}.prompt{text-align:left;padding:8px 14px;border-bottom:1px solid #eee}.cell-body{padding:16px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="topin"><div><a href="index.html">← Module 03 — AI Agents</a></div><div class="actions"><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/contents/playgrounds/03-ai-agents/stopping-conditions-and-budgets/lesson-07-stopping-conditions-and-budgets.ipynb" class="button">Download .ipynb</a><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/contents/playgrounds/03-ai-agents/stopping-conditions-and-budgets">Open playground</a></div></div></nav>
+<div class="note"><p>This page mirrors the runnable notebook. The examples are deterministic so you can inspect termination logic without spending API calls.</p></div>
+<main class="wrap"><article class="notebook">
+<header class="nb-head"><h1>Lesson 7 — Stopping Conditions and Budgets</h1><p>Module 03 · AI Agents · decide when an agent must stop, not just when the model wants to stop</p></header>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Completion and termination are different</h2><p>In earlier lessons, the model could return a final answer. That is one successful stopping condition. Production agents also need host-enforced termination when continuing is no longer safe, useful, or affordable.</p><blockquote><strong>The model may decide that it is finished. The application decides whether it is allowed to continue.</strong></blockquote><p>An agent that lacks stopping conditions can loop, repeat tools, burn tokens, wait forever on dependencies, or continue acting after it has stopped making progress.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Think of budgets as independent dimensions</h2><div class="cards"><div class="card"><h3>Step budget</h3><p>Maximum number of model decision turns.</p></div><div class="card"><h3>Tool-call budget</h3><p>Maximum external actions, independent of model steps and low-level retries.</p></div><div class="card"><h3>Time budget</h3><p>Wall-clock deadline for the whole run, plus narrower request timeouts.</p></div><div class="card"><h3>Token / cost budget</h3><p>Maximum model usage or estimated spend for the run.</p></div><div class="card"><h3>Progress budget</h3><p>Stop repeated actions or iterations that produce no new evidence.</p></div><div class="card"><h3>Authority boundary</h3><p>Stop when approval, permission, cancellation, or another external constraint blocks continuation.</p></div></div><p>A budget is a <strong>ceiling</strong>, not a target. A well-behaved agent should finish as soon as the goal is satisfied.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Where the checks belong</h2><div class="flow">before model call
+  ├── deadline exceeded?
+  ├── step budget exhausted?
+  └── token/cost budget exhausted?
+        ↓
+model decides
+        ↓
+before tool execution
+  ├── tool-call budget exhausted?
+  ├── repeated action?
+  └── permission / approval available?
+        ↓
+tool observation
+        ↓
+progress made?
+  ├── yes → continue if needed
+  └── no  → increment no-progress counter
+        ↓
+finish or terminate with explicit reason</div><p>Checking only <code>max_steps</code> at the bottom of the loop is too late for many real systems.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 1 — make the run budget explicit</h2><p>We model limits separately from usage. The budget object is configuration; the usage object is mutable host-owned state.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from dataclasses import dataclass
+from enum import Enum
+import time
+
+class StopReason(str, Enum):
+    COMPLETED = "completed"
+    STEP_BUDGET = "step_budget"
+    TOOL_BUDGET = "tool_budget"
+    TIME_BUDGET = "time_budget"
+    TOKEN_BUDGET = "token_budget"
+    COST_BUDGET = "cost_budget"
+    REPEATED_ACTION = "repeated_action"
+    NO_PROGRESS = "no_progress"
+
+@dataclass(frozen=True)
+class RunBudget:
+    max_steps: int = 5
+    max_tool_calls: int = 6
+    max_seconds: float = 30.0
+    max_tokens: int = 8_000
+    max_cost_usd: float = 0.25
+    max_same_action: int = 2
+    max_no_progress: int = 2
+
+@dataclass
+class RunUsage:
+    steps: int = 0
+    tool_calls: int = 0
+    tokens: int = 0
+    cost_usd: float = 0.0
+    no_progress: int = 0</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>Centralise the deterministic checks</h3><p>The model cannot increase these limits. The host can inspect them before expensive operations.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>def check_budget(
+    budget: RunBudget,
+    usage: RunUsage,
+    *,
+    started_at: float,
+    now: float | None = None,
+) -> StopReason | None:
+    current = time.monotonic() if now is None else now
+
+    if current - started_at >= budget.max_seconds:
+        return StopReason.TIME_BUDGET
+    if usage.steps >= budget.max_steps:
+        return StopReason.STEP_BUDGET
+    if usage.tool_calls >= budget.max_tool_calls:
+        return StopReason.TOOL_BUDGET
+    if usage.tokens >= budget.max_tokens:
+        return StopReason.TOKEN_BUDGET
+    if usage.cost_usd >= budget.max_cost_usd:
+        return StopReason.COST_BUDGET
+    if usage.no_progress >= budget.max_no_progress:
+        return StopReason.NO_PROGRESS
+    return None</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Do not confuse provider usage with budgets</h2><p>The provider may report input/output token usage after a model call. Your application records that usage and compares it with its own policy. Cost is normally derived from usage and the model's current pricing rather than trusted as a model decision.</p><div class="warning"><strong>Important:</strong> a post-call token count cannot prevent that call from exceeding a tiny remaining budget. For strict enforcement, reserve or estimate capacity before the call, then reconcile with actual usage afterwards.</div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 2 — repeated-action detection</h2><p>An agent can remain under its step budget while doing the same useless thing repeatedly. Detect repetitions before executing another identical tool call.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>import json
+from collections import Counter
+
+def action_fingerprint(name: str, arguments: dict) -> str:
+    normalized = json.dumps(arguments, sort_keys=True, separators=(",", ":"))
+    return f"{name}:{normalized}"
+
+def repeated_too_often(
+    fingerprints: list[str],
+    *,
+    max_same_action: int,
+) -> bool:
+    if not fingerprints:
+        return False
+    counts = Counter(fingerprints)
+    return counts[fingerprints[-1]] > max_same_action
+
+history = [
+    action_fingerprint("get_weather", {"city": "Melbourne", "date": "2026-09-26"}),
+    action_fingerprint("get_weather", {"date": "2026-09-26", "city": "Melbourne"}),
+    action_fingerprint("get_weather", {"city": "Melbourne", "date": "2026-09-26"}),
+]
+
+print(repeated_too_often(history, max_same_action=2))</code></pre><p>Expected result: <code>True</code>. Sorting the arguments makes semantically identical requests produce the same fingerprint.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Repeated action is not always lack of progress</h2><p>Polling a deployment status twice may be legitimate; querying the same weather endpoint three times with unchanged arguments is usually not. A useful detector combines action repetition with whether observations materially changed.</p><div class="cards"><div class="card"><h3>Action repetition</h3><p>“Did we request the same operation again?” Easy to detect deterministically.</p></div><div class="card"><h3>Observation progress</h3><p>“Did the new result add evidence or change state?” Domain-specific and sometimes harder.</p></div></div><p>Keep the first implementation conservative: detect obvious loops, then add domain-specific progress signals where they provide real value.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Example 3 — stop gracefully and preserve the trace</h2><p>Do not throw away everything when a budget ends. Return a structured run result that distinguishes successful completion from host-enforced termination.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from dataclasses import field
+
+@dataclass
+class RunResult:
+    stop_reason: StopReason
+    answer: str | None = None
+    usage: RunUsage = field(default_factory=RunUsage)
+    observations: list[dict] = field(default_factory=list)
+
+def stopped_result(
+    reason: StopReason,
+    *,
+    usage: RunUsage,
+    observations: list[dict],
+) -> RunResult:
+    return RunResult(
+        stop_reason=reason,
+        answer=None,
+        usage=usage,
+        observations=observations,
+    )</code></pre><p>The caller can now choose a user-facing response: partial result, clear limitation, resumable checkpoint, or escalation. A stop condition is an expected control-flow outcome, not necessarily an exception.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Putting the checks around an agent loop</h2><p>The exact provider/tool code is omitted here so the termination policy stays visible.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>def run_bounded_agent(goal: str, budget: RunBudget) -> RunResult:
+    started_at = time.monotonic()
+    usage = RunUsage()
+    observations: list[dict] = []
+    fingerprints: list[str] = []
+
+    while True:
+        reason = check_budget(budget, usage, started_at=started_at)
+        if reason:
+            return stopped_result(reason, usage=usage, observations=observations)
+
+        # response = call_model(...)
+        usage.steps += 1
+        # usage.tokens += response_tokens
+        # usage.cost_usd += estimated_cost
+
+        # if response is final:
+        #     return RunResult(StopReason.COMPLETED, response.answer, usage, observations)
+
+        # Before executing a requested tool:
+        reason = check_budget(budget, usage, started_at=started_at)
+        if reason:
+            return stopped_result(reason, usage=usage, observations=observations)
+
+        # fingerprint = action_fingerprint(call.name, call.arguments)
+        # fingerprints.append(fingerprint)
+        # if repeated_too_often(fingerprints, max_same_action=budget.max_same_action):
+        #     return stopped_result(StopReason.REPEATED_ACTION, usage=usage, observations=observations)
+        #
+        # usage.tool_calls += 1
+        # observation = execute_tool(...)
+        # observations.append(observation)
+        # update usage.no_progress based on whether useful state changed
+
+        raise NotImplementedError("Fill this section using the Lesson 3 agent loop")</code></pre><p>The exercise asks you to merge this policy into the earlier travel agent rather than hiding it behind a framework.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>What should happen when a budget is reached?</h2><div class="cards"><div class="card"><h3>Return a partial result</h3><p>Useful when the agent gathered valid evidence but did not fully complete the goal.</p></div><div class="card"><h3>Ask for approval</h3><p>Useful when additional cost, authority, or risky action is required. Lesson 8 develops this.</p></div><div class="card"><h3>Create a resumable checkpoint</h3><p>Useful for long-running work where a later process can continue from structured state.</p></div><div class="card"><h3>Fail clearly</h3><p>Sometimes the correct outcome is simply “I could not finish within the allowed limits.”</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Common mistakes</h2><div class="cards"><div class="card"><h3>Only setting max_steps</h3><p>A five-step agent can still make many retries, parallel tool calls, or expensive model requests.</p></div><div class="card"><h3>Letting the model extend its budget</h3><p>Limits are policy. A model can request more resources, but host code must decide.</p></div><div class="card"><h3>Stopping without a reason</h3><p>Operators and callers need to distinguish completion, timeout, cost limit, loop detection, and cancellation.</p></div><div class="card"><h3>Using budget as a target</h3><p>The agent should not “use all five steps.” It should stop as soon as the goal is complete.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Exercise</h2><ol><li>Integrate <code>RunBudget</code> and <code>RunUsage</code> into the Lesson 3 travel agent.</li><li>Set <code>max_tool_calls=1</code> for a goal that needs both weather and sunset. Confirm the run terminates before the second tool.</li><li>Simulate the model requesting the same weather call three times and stop it with <code>REPEATED_ACTION</code>.</li><li>Add a deterministic fake clock and verify the time budget without sleeping in tests.</li><li>Add a mock token/cost accumulator and show a graceful partial result when the cost ceiling is reached.</li></ol><p>The next lesson is <strong>Human-in-the-Loop</strong>: approvals, checkpoints, escalation, and how humans regain authority at high-impact boundaries.</p></div></section>
+
+</article></main>
+</body>
+</html>
