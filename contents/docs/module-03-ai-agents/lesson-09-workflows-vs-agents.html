@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 9 — Deterministic Workflows vs Agents</title>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#24292f;--muted:#6e7781;--line:#d0d7de;--blue:#0969da;--code:#f6f8fa;--warn:#fff8c5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.topin{max-width:1100px;margin:auto;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:var(--blue);text-decoration:none;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-block;background:var(--blue);color:#fff!important;padding:8px 12px;border-radius:7px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px 60px}.notebook{background:var(--paper);border:1px solid var(--line);box-shadow:0 3px 14px rgba(31,35,40,.08)}.nb-head{padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfd}.nb-head h1{margin:0 0 6px;font-size:1.45rem}.nb-head p{margin:0;color:var(--muted)}.cell{display:grid;grid-template-columns:78px 1fr;border-bottom:1px solid #eaeef2}.prompt{padding:18px 10px;text-align:right;color:#8c959f;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}.cell-body{padding:18px 24px;min-width:0}.markdown-cell .cell-body{background:#fff}.code-cell .cell-body{background:#fbfcfd}h1,h2,h3{line-height:1.25}h2{font-size:1.35rem;margin-top:10px}h3{font-size:1.12rem}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.code-cell pre{background:#0d1117;color:#e6edf3;border-color:#30363d}blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f6f8fa}.note{max-width:1100px;margin:0 auto 16px;padding:0 16px;color:var(--muted)}.warning{background:var(--warn);border:1px solid #d4a72c;border-radius:8px;padding:12px 14px}.flow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f6f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre;overflow:auto}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fbfcfd}.table{width:100%;border-collapse:collapse;margin:12px 0}.table th,.table td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}.table th{background:#f6f8fa}@media(max-width:700px){.cell{grid-template-columns:1fr}.prompt{text-align:left;padding:8px 14px;border-bottom:1px solid #eee}.cell-body{padding:16px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="topin"><div><a href="index.html">← Module 03 — AI Agents</a></div><div class="actions"><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/contents/playgrounds/03-ai-agents/workflows-vs-agents/lesson-09-workflows-vs-agents.ipynb" class="button">Download .ipynb</a><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/contents/playgrounds/03-ai-agents/workflows-vs-agents">Open playground</a></div></div></nav>
+<div class="note"><p>This page mirrors the runnable notebook. The lesson is about architecture choice: where ordinary control flow is enough, where model-driven decisions help, and where a hybrid is the best design.</p></div>
+<main class="wrap"><article class="notebook">
+<header class="nb-head"><h1>Lesson 9 — Deterministic Workflows vs Agents</h1><p>Module 03 · AI Agents · choose the minimum autonomy that solves the problem well</p></header>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>The architecture question</h2><p>By now we can build an agent loop, manage state, plan, retry, enforce budgets, and pause for approval. The next question is more important than any of those mechanisms:</p><blockquote><strong>Should this problem be an agent at all?</strong></blockquote><p>Agentic control is useful when the correct sequence of actions cannot be fully known in advance and the model can use observations to choose a better next step. If the sequence is already known, ordinary software is often clearer, cheaper, faster, and easier to test.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Three architecture shapes</h2><div class="cards"><div class="card"><h3>Deterministic workflow</h3><div class="flow">validate → fetch → transform → persist → notify</div><p>The application owns the sequence and branching rules.</p></div><div class="card"><h3>Agent</h3><div class="flow">observe → model decides → act → observe → ...</div><p>The model participates in choosing the next action.</p></div><div class="card"><h3>Hybrid</h3><div class="flow">deterministic guardrails
+        ↓
+bounded agentic decision
+        ↓
+deterministic validation / execution</div><p>Only the uncertain part gets model autonomy.</p></div><div class="card"><h3>LLM inside a workflow</h3><div class="flow">fixed step → classify/summarize with LLM → fixed step</div><p>Using an LLM does not automatically make the system an agent.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>A practical decision framework</h2><table class="table"><thead><tr><th>Question</th><th>Pushes toward workflow</th><th>Pushes toward agent</th></tr></thead><tbody>
+<tr><td>Is the action sequence known?</td><td>Yes, stable and explicit</td><td>No, depends on observations</td></tr>
+<tr><td>Are branches easy to encode?</td><td>Small finite rule set</td><td>Many fuzzy or open-ended possibilities</td></tr>
+<tr><td>Are actions consequential?</td><td>Prefer deterministic control around them</td><td>Agent may propose, but execution still gated</td></tr>
+<tr><td>Is evaluation objective?</td><td>Rules/tests can verify each step</td><td>Quality requires semantic judgment</td></tr>
+<tr><td>What is the cost of extra autonomy?</td><td>Latency/cost/risk outweigh benefit</td><td>Adaptive reasoning materially improves results</td></tr>
+</tbody></table><p>The answer is often <strong>hybrid</strong>: deterministic software for known rules and side effects, with a bounded model decision where ambiguity actually exists.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Theoretical examples</h2><p><strong>Password reset:</strong> identity checks, token issuance, expiry, and password update are a deterministic workflow. An LLM might explain the process, but should not invent the security flow.</p><p><strong>Invoice ingestion:</strong> upload → virus scan → parse → validate required fields → save is mostly deterministic. An LLM may extract ambiguous text, but orchestration can remain fixed.</p><p><strong>Incident investigation:</strong> the useful next query may depend on metrics, logs, deployment history, and new evidence. This is a stronger candidate for bounded agentic investigation.</p><p><strong>Travel booking:</strong> research and comparison may benefit from agentic exploration; payment and booking should remain deterministic and approval-gated.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Main example — design the same travel task three ways</h2><blockquote>Find a suitable hotel for one night in Melbourne under A$300, prefer refundable options, and book only after I approve.</blockquote><p>The task contains both predictable rules and open-ended choice. We will model deterministic, agentic, and hybrid versions to make the trade-off visible.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>1. Deterministic workflow</h3><p>If our product has a known search API and explicit ranking criteria, ordinary code may be enough.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Hotel:
+    name: str
+    total_aud: int
+    refundable: bool
+    rating: float
+
+HOTELS = [
+    Hotel("Central Stay", 260, True, 4.2),
+    Hotel("River Rooms", 220, False, 4.6),
+    Hotel("Garden Hotel", 290, True, 4.5),
+    Hotel("Premium Suites", 360, True, 4.8),
+]
+
+def choose_hotel_deterministically(hotels: list[Hotel], max_price: int) -> Hotel:
+    eligible = [hotel for hotel in hotels if hotel.total_aud <= max_price]
+    if not eligible:
+        raise ValueError("No hotel fits the budget")
+
+    return max(
+        eligible,
+        key=lambda h: (h.refundable, h.rating, -h.total_aud),
+    )
+
+choice = choose_hotel_deterministically(HOTELS, max_price=300)
+choice</code></pre><p>The policy is explicit: filter by hard budget, then prefer refundable, then rating, then lower price. There is little value in asking a model to rediscover this logic on every run.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>2. Agentic selection</h3><p>Suppose suitability is open-ended: “quiet but central, good for a child, close to evening activities, avoid nightlife-heavy streets.” The relevant trade-offs may be harder to encode as a small ranking function. A model can compare structured observations and choose what additional information it needs.</p><div class="flow">goal
+ ↓
+search hotels
+ ↓
+model compares options
+ ↓
+needs neighbourhood context?
+ ├── yes → inspect area
+ └── no
+ ↓
+needs cancellation details?
+ ├── yes → fetch policy
+ └── no
+ ↓
+recommend option</div><p>This is genuinely more agentic because the model participates in deciding which evidence to gather next.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h3>3. Hybrid design</h3><p>For the full booking product, neither extreme is ideal.</p><div class="flow">deterministic:
+  validate dates, budget, travellers
+        ↓
+agentic:
+  research + compare ambiguous preferences
+        ↓
+deterministic:
+  enforce hard price/policy constraints
+        ↓
+human approval:
+  exact proposed booking
+        ↓
+deterministic:
+  idempotent booking API call + audit</div><p>The model gets autonomy only where semantic judgment is useful. Authority and invariants remain outside the model.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Represent architecture choice explicitly</h2><p>A small classifier can help teams discuss design before implementation. This is not something the model must decide at runtime; it is an engineering design aid.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from enum import Enum
+
+class Architecture(str, Enum):
+    WORKFLOW = "workflow"
+    AGENT = "agent"
+    HYBRID = "hybrid"
+
+@dataclass(frozen=True)
+class TaskCharacteristics:
+    sequence_known: bool
+    open_ended_decisions: bool
+    consequential_side_effects: bool
+    semantic_judgment_needed: bool
+
+def recommend_architecture(task: TaskCharacteristics) -> Architecture:
+    if task.open_ended_decisions and task.consequential_side_effects:
+        return Architecture.HYBRID
+    if task.open_ended_decisions or (
+        task.semantic_judgment_needed and not task.sequence_known
+    ):
+        return Architecture.AGENT
+    return Architecture.WORKFLOW
+
+examples = {
+    "password_reset": TaskCharacteristics(True, False, True, False),
+    "incident_investigation": TaskCharacteristics(False, True, False, True),
+    "travel_booking": TaskCharacteristics(False, True, True, True),
+}
+
+for name, task in examples.items():
+    print(name, "→", recommend_architecture(task).value)</code></pre><p>The point is the questions, not this toy scoring rule. Real architecture reviews should discuss failure modes, observability, permissions, evaluation, latency, and reversibility.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>LLM ≠ agent</h2><p>This fixed pipeline still is not an agent:</p><pre><code>document = load_pdf()
+fields = llm_extract_fields(document)
+validated = validate(fields)
+save(validated)</code></pre><p>The LLM performs a semantic transformation, but application code still determines the sequence. This distinction is useful because many production AI systems need LLM capability without agentic orchestration.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Why hybrid designs are common in production</h2><div class="cards"><div class="card"><h3>Deterministic shell</h3><p>Authentication, validation, budgets, policy, persistence, approvals, and side effects remain predictable.</p></div><div class="card"><h3>Agentic island</h3><p>The model handles ambiguity, exploration, semantic comparison, or adaptive investigation.</p></div><div class="card"><h3>Inspectable boundary</h3><p>Structured inputs and outputs make it possible to test where autonomy begins and ends.</p></div><div class="card"><h3>Fallback path</h3><p>The system can degrade to rules, partial results, or human escalation if the agentic part fails.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Common architecture mistakes</h2><div class="cards"><div class="card"><h3>Agentifying a fixed pipeline</h3><p>The model chooses among steps whose order was already known, adding cost and nondeterminism without value.</p></div><div class="card"><h3>Encoding ambiguity as endless rules</h3><p>Hundreds of brittle branches try to approximate semantic judgment that a model could handle better.</p></div><div class="card"><h3>Letting the agent own invariants</h3><p>Price limits, permissions, tenant boundaries, and irreversible side effects become prompt instructions instead of code policy.</p></div><div class="card"><h3>All-or-nothing thinking</h3><p>Teams choose “workflow” or “agent” for an entire product instead of separating deterministic and agentic regions.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Exercise</h2><ol><li>Classify these as workflow, agent, or hybrid: password reset, support-ticket routing, production incident investigation, invoice ingestion, holiday itinerary planning.</li><li>Change the hotel-ranking policy and verify the deterministic workflow remains easy to test.</li><li>Add an ambiguous preference such as “good for a quiet family evening.” Identify exactly where an agentic comparison would add value.</li><li>Draw a hybrid architecture for an engineering assistant that investigates Kubernetes incidents but requires approval before mutation.</li><li>For one system you work on, mark every boundary where the model makes a control-flow decision. Remove autonomy from any boundary where it adds no clear value.</li></ol><p>The next lesson is <strong>Build a Real Agent from Scratch in Python</strong>: combine tools, state, looping, planning, retries, budgets, and approvals into one small coherent implementation before comparing frameworks.</p></div></section>
+
+</article></main>
+</body>
+</html>
