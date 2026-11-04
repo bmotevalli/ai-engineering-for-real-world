@@ -140,7 +140,7 @@ Lesson 7 established:
 - Graceful termination may return a partial result, create a resumable checkpoint, escalate, or fail clearly.
 
 
-Lesson 8 introduces:
+Lesson 8 established:
 
 - Human-in-the-loop is an explicit authority/judgment boundary, not a requirement to review every agent step.
 - Common patterns include approval before action, clarification, escalation, and review-before-publication/execution.
@@ -152,12 +152,24 @@ Lesson 8 introduces:
 - Human review does not replace authentication, validation, tenant isolation, hard policy, idempotency, or other deterministic safety controls.
 - Approval records need scope, identity, auditability, and often expiry.
 
+
+Lesson 9 introduces:
+
+- The presence of an LLM does not make a system agentic; the key question is who controls the next action.
+- Deterministic workflows are preferable when sequence and branching rules are already known and easy to encode.
+- Agentic control is valuable when the useful next action depends on observations and open-ended semantic judgment.
+- Hybrid architectures often provide the best production trade-off: deterministic guardrails around a bounded agentic region.
+- Authentication, validation, hard constraints, budgets, permissions, approvals, persistence, and side effects usually remain deterministic.
+- Agentic regions are best reserved for exploration, semantic comparison, adaptive investigation, and other genuinely uncertain decisions.
+- A deterministic shell around an agentic island improves observability, testability, fallback behavior, and authority boundaries.
+- Use the minimum autonomy necessary; do not agentify a fixed pipeline merely because a model and tools are available.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 8 — Human-in-the-Loop
-- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries; Lesson 7 — Stopping Conditions and Budgets
-- Next: Work through the Lesson 8 approval notebook, test exact-proposal binding and pause/resume semantics, design an approval view for a production rollback, then move to Lesson 9 — Deterministic Workflows vs Agents.
+- Current lesson: Lesson 9 — Deterministic Workflows vs Agents
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries; Lesson 7 — Stopping Conditions and Budgets; Lesson 8 — Human-in-the-Loop
+- Next: Work through the Lesson 9 architecture notebook, compare deterministic, agentic, and hybrid versions of the same task, then move to Lesson 10 — Build a Real Agent from Scratch in Python.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
