@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 10 — Build a Real Agent from Scratch in Python</title>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#24292f;--muted:#6e7781;--line:#d0d7de;--blue:#0969da;--code:#f6f8fa;--warn:#fff8c5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.topin{max-width:1100px;margin:auto;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:var(--blue);text-decoration:none;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-block;background:var(--blue);color:#fff!important;padding:8px 12px;border-radius:7px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px 60px}.notebook{background:var(--paper);border:1px solid var(--line);box-shadow:0 3px 14px rgba(31,35,40,.08)}.nb-head{padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfd}.nb-head h1{margin:0 0 6px;font-size:1.45rem}.nb-head p{margin:0;color:var(--muted)}.cell{display:grid;grid-template-columns:78px 1fr;border-bottom:1px solid #eaeef2}.prompt{padding:18px 10px;text-align:right;color:#8c959f;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}.cell-body{padding:18px 24px;min-width:0}.markdown-cell .cell-body{background:#fff}.code-cell .cell-body{background:#fbfcfd}h1,h2,h3{line-height:1.25}h2{font-size:1.35rem;margin-top:10px}h3{font-size:1.12rem}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.code-cell pre{background:#0d1117;color:#e6edf3;border-color:#30363d}blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f6f8fa}.note{max-width:1100px;margin:0 auto 16px;padding:0 16px;color:var(--muted)}.warning{background:var(--warn);border:1px solid #d4a72c;border-radius:8px;padding:12px 14px}.flow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f6f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre;overflow:auto}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fbfcfd}.table{width:100%;border-collapse:collapse;margin:12px 0}.table th,.table td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}.table th{background:#f6f8fa}@media(max-width:700px){.cell{grid-template-columns:1fr}.prompt{text-align:left;padding:8px 14px;border-bottom:1px solid #eee}.cell-body{padding:16px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="topin"><div><a href="index.html">← Module 03 — AI Agents</a></div><div class="actions"><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/contents/playgrounds/03-ai-agents/real-agent-from-scratch/lesson-10-real-agent.ipynb" class="button">Download .ipynb</a><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/contents/playgrounds/03-ai-agents/real-agent-from-scratch">Open playground</a></div></div></nav>
+<div class="note"><p>This is the integration lesson. The reusable orchestration lives in <code>agent.py</code> so deterministic logic can be unit tested normally; the notebook explains how the pieces fit together.</p></div>
+<main class="wrap"><article class="notebook">
+<header class="nb-head"><h1>Lesson 10 — Build a Real Agent from Scratch in Python</h1><p>Module 03 · AI Agents · combine the pieces before introducing a framework</p></header>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>What makes this lesson different?</h2><p>Earlier lessons isolated one mechanism at a time. Now we connect them into one small agent and keep every important boundary visible.</p><blockquote><strong>The model owns bounded decisions; the host owns tools, state, budgets, retry policy, validation, approvals, and execution authority.</strong></blockquote><p>The goal is not to create the shortest code. The goal is to understand the architecture that frameworks later compress.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Scenario</h2><blockquote>Plan a family-friendly afternoon in Melbourne tomorrow. Check the weather and daylight. Prefer outdoor activities if conditions are suitable. If you recommend something that needs a reservation, ask before reserving it for three people.</blockquote><p>The agent has live weather and sun-time tools, a small deterministic activity catalogue, and a simulated reservation tool. The reservation is a side effect and cannot execute without approval.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Everything we are integrating</h2><table class="table"><thead><tr><th>Concept</th><th>Implementation</th></tr></thead><tbody>
+<tr><td>Tool calling</td><td>Strict schemas + allowlisted registry</td></tr>
+<tr><td>Agent loop</td><td>Repeated model decision → tool → observation</td></tr>
+<tr><td>State</td><td><code>AgentState</code> stores protocol items, observations, usage, fingerprints, plan</td></tr>
+<tr><td>Memory</td><td>Only selected relevant preferences are injected</td></tr>
+<tr><td>Planning</td><td>Optional concise external plan for broad goals</td></tr>
+<tr><td>Retries</td><td>Bounded retries for timeout/connection/429/5xx read failures</td></tr>
+<tr><td>Budgets</td><td>Step, tool-call, retry, and repeated-action limits</td></tr>
+<tr><td>Human-in-the-loop</td><td>Side effects return <code>WAITING_FOR_APPROVAL</code></td></tr>
+<tr><td>Hybrid architecture</td><td>Deterministic shell around model-selected actions</td></tr>
+</tbody></table></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Architecture</h2><div class="flow">selected memory + goal
+        ↓
+optional external plan
+        ↓
+┌──────────── host-owned loop ────────────┐
+│ check budgets                            │
+│        ↓                                 │
+│ model chooses next action                │
+│        ↓                                 │
+│ validate allowlist + arguments            │
+│        ↓                                 │
+│ detect repeated action                   │
+│        ↓                                 │
+│ read-only tool? → retry safely → observe │
+│        │                                 │
+│        no                                │
+│        ↓                                 │
+│ side effect → WAITING_FOR_APPROVAL       │
+└──────────────────────────────────────────┘</div><p>Nothing in this architecture gives the model direct Python execution or permission to expand its own authority.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Reusable host objects</h2><p>The implementation defines explicit application types instead of hiding control state in prompts:</p><div class="cards"><div class="card"><h3>Tool</h3><p>Name, description, schema, handler, side-effect flag.</p></div><div class="card"><h3>AgentState</h3><p>Goal, provider protocol items, observations, action fingerprints, usage, plan, selected memory.</p></div><div class="card"><h3>RunBudget / RunUsage</h3><p>Host-owned limits and counters.</p></div><div class="card"><h3>ActionProposal / AgentResult</h3><p>Explicit approval checkpoint and structured run outcome.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>The tool registry</h2><p>Three tools are read-only: <code>get_weather</code>, <code>get_sun_times</code>, and <code>search_activities</code>. <code>reserve_activity</code> is marked as a side effect. The model sees schemas; only host code holds the executable handlers.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from agent import TOOLS
+
+for name, tool in TOOLS.items():
+    print(f"{name:20} side_effect={tool.side_effect}")</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Selected memory, not unlimited history</h2><p>The example injects stable travel preferences such as <code>family-friendly</code> and an outdoor preference. Old weather observations or irrelevant conversations are not automatically carried forward.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>memory = {
+    "travel_style": "family-friendly",
+    "outdoor_preference": "prefer outdoors when weather is suitable",
+}</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Planning remains optional</h2><p>For this broad goal we enable a concise external plan. For a simple question such as “What is tomorrow's Melbourne weather?”, planning should remain off. Planning is orchestration overhead, not a badge of sophistication.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Budgets before autonomy</h2><p>The runner receives a small <code>RunBudget</code>. Step limits, tool-call limits, retry attempts, and repeated-action limits are host policy. The model cannot increase them.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from agent import RunBudget
+
+budget = RunBudget(
+    max_steps=6,
+    max_tool_calls=6,
+    max_same_action=2,
+    retry_attempts=3,
+)</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>The integrated run</h2><p>The main notebook calls <code>run_agent(...)</code>. The exact tool sequence may vary because the model owns the bounded decision. What should not vary are the host boundaries.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from agent import run_agent
+
+goal = (
+    "Plan a family-friendly afternoon in Melbourne tomorrow. "
+    "Check the weather and daylight. Prefer outdoor activities if conditions are suitable. "
+    "If you recommend something that needs a reservation, ask before reserving it for three people."
+)
+
+result = run_agent(
+    goal,
+    budget=budget,
+    memory_context=memory,
+    use_planning=True,
+)
+
+print("status:", result.status.value)
+print("reason:", result.stop_reason.value)
+print("steps:", result.state.usage.steps)
+print("tool calls:", result.state.usage.tool_calls)</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Approval is part of control flow</h2><p>If the model chooses a no-reservation activity, the run may complete normally. If it requests <code>reserve_activity</code>, the host does <strong>not</strong> execute it. The result becomes <code>WAITING_FOR_APPROVAL</code> with the exact pending proposal.</p><div class="flow">model requests reserve_activity
+        ↓
+validate tool + arguments
+        ↓
+side_effect == True
+        ↓
+create exact ActionProposal
+        ↓
+RETURN WAITING_FOR_APPROVAL
+        ↓
+human approve / deny
+        ↓
+append observation
+        ↓
+resume agent loop</div></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from agent import RunStatus, resume_after_approval
+
+if result.status == RunStatus.WAITING_FOR_APPROVAL:
+    resumed = resume_after_approval(
+        result,
+        approved=True,  # try False as well
+        budget=budget,
+    )
+    print(resumed.status.value)
+    print(resumed.answer)</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Why the trace matters</h2><p>A final answer is not enough for production debugging. The host separately stores structured observations: which tool ran, with which arguments, and what happened. That is easier to log, test, evaluate, and inspect than reconstructing execution from prose.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>for item in result.state.observations:
+    print(item["tool"], item["arguments"])
+    print(item["observation"])</code></pre></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>The reusable implementation</h2><p>The full code is in <code>agent.py</code>. It intentionally remains explicit: tool registry, argument validation, retry wrapper, state, budgets, repeated-action detection, model calls, approval pause, and resume are visible as normal Python.</p><p>A small <code>test_agent.py</code> covers deterministic pieces such as fingerprint stability, argument validation, activity search, and approval binding. The notebook does not try to unit-test itself.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>What is still intentionally missing?</h2><div class="cards"><div class="card"><h3>Durable checkpoints</h3><p>Approval state is in memory for the lesson. Production would persist it.</p></div><div class="card"><h3>Full usage accounting</h3><p>Step/tool budgets are integrated; richer token, cost, deadline, and cancellation accounting would be added around provider calls.</p></div><div class="card"><h3>Strong typed validation</h3><p>The lesson keeps schemas readable. Production systems may use typed domain models and more precise validation.</p></div><div class="card"><h3>Evaluation + observability</h3><p>Systematic traces, metrics, test datasets, and agent evaluation belong in later modules.</p></div></div><p>These omissions are useful preparation for the next lesson: we can now judge frameworks against concrete responsibilities rather than marketing abstractions.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Engineering extension</h2><p>The travel tools can be replaced with <code>check_service_health</code>, <code>get_pod_logs</code>, <code>get_kubernetes_events</code>, and a side-effecting <code>rollback_deployment</code>. The host architecture remains the same: read-only investigation can be agentic, while mutation is validated, bounded, and approval-gated.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Exercise</h2><ol><li>Disable planning and ask a one-tool weather question. Compare the simpler trace.</li><li>Set <code>max_tool_calls=1</code> for the broad goal and inspect the stop reason.</li><li>Deny a reservation and observe how the model adapts.</li><li>Add a new read-only <code>get_activity_details</code> tool without changing the main loop.</li><li>Add a stable memory preference such as <code>avoid_boats=true</code> and decide whether it belongs in durable memory.</li><li>Replace the travel tools with engineering investigation tools while keeping the same runner architecture.</li></ol><p>The next lesson is <strong>Compare Agent Frameworks</strong>: now that the mechanics are explicit, we can evaluate what LangGraph-style orchestration simplifies and what responsibilities remain ours.</p></div></section>
+
+</article></main>
+</body>
+</html>
