@@ -153,7 +153,7 @@ Lesson 8 established:
 - Approval records need scope, identity, auditability, and often expiry.
 
 
-Lesson 9 introduces:
+Lesson 9 established:
 
 - The presence of an LLM does not make a system agentic; the key question is who controls the next action.
 - Deterministic workflows are preferable when sequence and branching rules are already known and easy to encode.
@@ -164,12 +164,25 @@ Lesson 9 introduces:
 - A deterministic shell around an agentic island improves observability, testability, fallback behavior, and authority boundaries.
 - Use the minimum autonomy necessary; do not agentify a fixed pipeline merely because a model and tools are available.
 
+
+Lesson 10 introduces:
+
+- The course's first integrated agent combines tool calling, explicit state, the agent loop, selected memory context, optional planning, retries, budgets, repeated-action detection, and human approval.
+- Reusable orchestration belongs in normal Python modules when it deserves tests; the notebook remains the primary teaching surface.
+- A tool registry separates model-visible schemas from executable handlers and marks side-effecting tools explicitly.
+- Read-only external calls may use bounded transient retries; side effects pause at an approval boundary instead of executing automatically.
+- Agent runs return structured outcomes such as completed, stopped, or waiting for approval rather than relying only on exceptions or final text.
+- Planning remains optional and should be skipped for simple goals.
+- Selected memory should contain only relevant stable context, not unlimited prior history or stale observations.
+- The integrated implementation is intentionally explicit so the next lesson can compare framework abstractions against concrete responsibilities.
+- Frameworks may reduce orchestration boilerplate, but validation, authority, budgets, idempotency, memory policy, approvals, observability, and evaluation remain application concerns.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 9 — Deterministic Workflows vs Agents
-- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries; Lesson 7 — Stopping Conditions and Budgets; Lesson 8 — Human-in-the-Loop
-- Next: Work through the Lesson 9 architecture notebook, compare deterministic, agentic, and hybrid versions of the same task, then move to Lesson 10 — Build a Real Agent from Scratch in Python.
+- Current lesson: Lesson 10 — Build a Real Agent from Scratch in Python
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries; Lesson 7 — Stopping Conditions and Budgets; Lesson 8 — Human-in-the-Loop; Lesson 9 — Deterministic Workflows vs Agents
+- Next: Work through the Lesson 10 integrated-agent notebook, inspect the host/model boundaries, run the deterministic tests, exercise approval resume/denial and budget stops, then move to Lesson 11 — Compare Agent Frameworks.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
