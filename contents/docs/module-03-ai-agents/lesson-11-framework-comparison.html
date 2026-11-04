@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 11 — Compare Agent Frameworks</title>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#24292f;--muted:#6e7781;--line:#d0d7de;--blue:#0969da;--code:#f6f8fa;--warn:#fff8c5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.topin{max-width:1100px;margin:auto;padding:12px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:var(--blue);text-decoration:none;font-weight:600}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-block;background:var(--blue);color:#fff!important;padding:8px 12px;border-radius:7px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px 60px}.notebook{background:var(--paper);border:1px solid var(--line);box-shadow:0 3px 14px rgba(31,35,40,.08)}.nb-head{padding:20px 24px;border-bottom:1px solid var(--line);background:#fbfcfd}.nb-head h1{margin:0 0 6px;font-size:1.45rem}.nb-head p{margin:0;color:var(--muted)}.cell{display:grid;grid-template-columns:78px 1fr;border-bottom:1px solid #eaeef2}.prompt{padding:18px 10px;text-align:right;color:#8c959f;font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}.cell-body{padding:18px 24px;min-width:0}.markdown-cell .cell-body{background:#fff}.code-cell .cell-body{background:#fbfcfd}h1,h2,h3{line-height:1.25}h2{font-size:1.35rem;margin-top:10px}h3{font-size:1.12rem}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.code-cell pre{background:#0d1117;color:#e6edf3;border-color:#30363d}blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f6f8fa}.note{max-width:1100px;margin:0 auto 16px;padding:0 16px;color:var(--muted)}.warning{background:var(--warn);border:1px solid #d4a72c;border-radius:8px;padding:12px 14px}.flow{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f6f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre;overflow:auto}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:8px;padding:14px;background:#fbfcfd}.table{width:100%;border-collapse:collapse;margin:12px 0}.table th,.table td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}.table th{background:#f6f8fa}@media(max-width:700px){.cell{grid-template-columns:1fr}.prompt{text-align:left;padding:8px 14px;border-bottom:1px solid #eee}.cell-body{padding:16px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="topin"><div><a href="index.html">← Module 03 — AI Agents</a></div><div class="actions"><a class="button" href="https://github.com/bmotevalli/ai-engineering-for-real-world/raw/refs/heads/main/contents/playgrounds/03-ai-agents/framework-comparison/lesson-11-framework-comparison.ipynb">Download .ipynb</a><a href="https://github.com/bmotevalli/ai-engineering-for-real-world/tree/main/contents/playgrounds/03-ai-agents/framework-comparison">Open playground</a></div></div></nav>
+<div class="note"><p>This lesson compares LangGraph orchestration with the first-principles agent built in Lesson 10. Direct OpenAI calls remain visible so the comparison is about orchestration, not a wholesale stack change.</p></div>
+<main class="wrap"><article class="notebook">
+<header class="nb-head"><h1>Lesson 11 — Compare Agent Frameworks</h1><p>Module 03 · AI Agents · understand what the framework automates and what remains your responsibility</p></header>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Why introduce a framework now?</h2><p>We already built tools, state, loops, routing, retries, budgets, and approvals ourselves. That gives us a concrete baseline. A framework should now earn its place by reducing orchestration complexity without hiding policies we still need to own.</p><blockquote><strong>Do not ask “Can the framework build an agent?” Ask “Which responsibilities should the framework own?”</strong></blockquote></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Why LangGraph for the comparison?</h2><p>LangGraph is a low-level orchestration framework aimed at long-running, stateful agent workflows. It can be used independently of the higher-level LangChain agent APIs, which makes it a useful comparison against our explicit Python runner.</p><p>We keep the OpenAI Responses API directly in the model node. This isolates the new abstraction to graph orchestration.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Translate what we already know</h2><table class="table"><thead><tr><th>First-principles mechanism</th><th>LangGraph primitive</th></tr></thead><tbody>
+<tr><td><code>AgentState</code></td><td>graph state schema</td></tr>
+<tr><td>agent loop</td><td>edges and cycles</td></tr>
+<tr><td>model decision</td><td>model node</td></tr>
+<tr><td>tool dispatcher</td><td>tool node</td></tr>
+<tr><td>Python branching</td><td>conditional edge / router</td></tr>
+<tr><td>successful or forced stop</td><td>route to <code>END</code></td></tr>
+<tr><td>persisted checkpoint</td><td>checkpointer/persistence</td></tr>
+<tr><td>approval pause</td><td>interrupt + resume pattern</td></tr>
+</tbody></table><p>The abstractions have names now, but none of these ideas should be mysterious after Lessons 2–10.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>The graph</h2><div class="flow">START
+  ↓
+model
+  ├── final / stopped → END
+  └── tool request → tool
+                      ↓
+                    model</div><p>This is essentially the same control loop we previously wrote with a <code>while</code> loop. The difference is that topology describes transitions explicitly.</p></div></section>
+
+<section class="cell code-cell"><div class="prompt">In [ ]</div><div class="cell-body"><pre><code>from langgraph.graph import END, START, StateGraph
+
+builder = StateGraph(GraphState)
+builder.add_node("model", model_node)
+builder.add_node("tool", tool_node)
+builder.add_edge(START, "model")
+builder.add_conditional_edges(
+    "model",
+    route_after_model,
+    {"tool": "tool", "end": END},
+)
+builder.add_edge("tool", "model")
+
+graph = builder.compile()</code></pre><p>The runnable version lives in <code>framework_agent.py</code> and keeps direct OpenAI function calling visible.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>What gets better?</h2><div class="cards"><div class="card"><h3>Topology</h3><p>Possible transitions are explicit rather than scattered across a large loop.</p></div><div class="card"><h3>Stateful orchestration</h3><p>Nodes read state and return updates under a consistent graph model.</p></div><div class="card"><h3>Complex branching</h3><p>Planning, repair, approval, fallback, and verification can become distinct nodes.</p></div><div class="card"><h3>Long-running flows</h3><p>Framework persistence and pause/resume become valuable when runs outlive a single request.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>What does not become the framework's problem?</h2><p>We still own tool authorization, argument/domain validation, side-effect safety, retry classification, idempotency, memory selection, cost policy, approval rules, tenant isolation, observability, and evaluation.</p><div class="warning"><strong>Framework abstraction is orchestration, not governance.</strong> Moving control flow into graph nodes does not make unsafe tools safe or vague memory policies correct.</div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Direct comparison</h2><table class="table"><thead><tr><th>Concern</th><th>Plain Python</th><th>LangGraph</th></tr></thead><tbody>
+<tr><td>control flow</td><td>explicit loop</td><td>nodes and edges</td></tr>
+<tr><td>branching</td><td><code>if</code>/<code>match</code></td><td>conditional routing</td></tr>
+<tr><td>cycles</td><td>loop code</td><td>graph cycles</td></tr>
+<tr><td>persistence</td><td>custom</td><td>framework support</td></tr>
+<tr><td>pause/resume</td><td>custom checkpoint semantics</td><td>framework interrupt/checkpoint patterns</td></tr>
+<tr><td>tool security</td><td>application responsibility</td><td>application responsibility</td></tr>
+<tr><td>domain validation</td><td>application responsibility</td><td>application responsibility</td></tr>
+<tr><td>cost/retry policy</td><td>application responsibility</td><td>application responsibility</td></tr>
+</tbody></table></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Why frameworks are more valuable as complexity grows</h2><p>A two-node synchronous agent may be clearer as plain Python. A system with investigate → diagnose → repair plan → approval → execute → verify → fallback, plus durable checkpoints and streaming, is where a graph abstraction starts paying for itself.</p><p>The right abstraction depends on the shape of the system—not on whether “agents” are fashionable.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Frameworks do not erase provider differences</h2><p>OpenAI, Anthropic, Gemini, and local model stacks differ in tool-call protocols, structured outputs, streaming, usage reporting, reasoning controls, caching, multimodal capabilities, and error behavior. Orchestration abstractions can normalize some of this, but provider-specific behavior still leaks through in real applications.</p></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>When to use what</h2><div class="cards"><div class="card"><h3>Plain Python</h3><p>Few states, small agent, maximum transparency, custom behavior, or a learning/prototype context.</p></div><div class="card"><h3>LangGraph-style framework</h3><p>Growing state machines, cycles, long-running execution, persistence, approval checkpoints, streaming, and multiple recovery paths.</p></div><div class="card"><h3>Higher-level prebuilt agent</h3><p>Standard architectures where rapid delivery matters more than controlling every orchestration detail.</p></div><div class="card"><h3>Deterministic workflow</h3><p>When model-driven control flow is unnecessary in the first place.</p></div></div></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Exercise</h2><ol><li>Run the LangGraph example and inspect the final graph state.</li><li>Add a second read-only tool without adding another model-control loop.</li><li>Add a tool-call budget to state and route budget exhaustion to <code>END</code>.</li><li>Sketch Lesson 10's approval flow as an approval node plus persisted checkpoint/resume.</li><li>Compare traces from the handwritten runner and graph for the same task.</li><li>Design an incident-response graph: investigate → diagnose → approval → remediation → verify, with a repair cycle if verification fails.</li></ol></div></section>
+
+<section class="cell markdown-cell"><div class="prompt">Markdown</div><div class="cell-body"><h2>Module 03 checkpoint</h2><p>You should now be able to recognize what an agent framework manages underneath and, more importantly, what it does <strong>not</strong> manage for you.</p><p>The next module moves beyond a single agent into <strong>Agentic Systems</strong>: larger orchestration patterns, specialized components, coordination, decomposition, and production architecture.</p></div></section>
+
+</article></main></body></html>
