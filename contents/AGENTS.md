@@ -165,7 +165,7 @@ Lesson 9 established:
 - Use the minimum autonomy necessary; do not agentify a fixed pipeline merely because a model and tools are available.
 
 
-Lesson 10 introduces:
+Lesson 10 established:
 
 - The course's first integrated agent combines tool calling, explicit state, the agent loop, selected memory context, optional planning, retries, budgets, repeated-action detection, and human approval.
 - Reusable orchestration belongs in normal Python modules when it deserves tests; the notebook remains the primary teaching surface.
@@ -177,12 +177,25 @@ Lesson 10 introduces:
 - The integrated implementation is intentionally explicit so the next lesson can compare framework abstractions against concrete responsibilities.
 - Frameworks may reduce orchestration boilerplate, but validation, authority, budgets, idempotency, memory policy, approvals, observability, and evaluation remain application concerns.
 
+
+Lesson 11 introduces:
+
+- Agent frameworks should be evaluated against understood first-principles mechanisms rather than treated as magic.
+- LangGraph is used as a low-level orchestration comparison while direct OpenAI provider calls remain explicit.
+- Graph state corresponds to application state; nodes correspond to model/tool/decision stages; edges and cycles correspond to control flow and loops.
+- Conditional routing replaces handwritten branch logic; routing to END represents completion or forced termination.
+- Framework persistence and interrupt/resume capabilities map to the checkpoint and human-approval concepts introduced earlier.
+- Frameworks can reduce orchestration boilerplate and make complex topology clearer as state machines grow.
+- Tool security, domain validation, retry/idempotency policy, budgets, memory lifecycle, approval policy, tenant isolation, observability, and evaluation remain application responsibilities.
+- Provider-specific behavior still leaks through orchestration abstractions.
+- Plain Python remains appropriate for small transparent agents; graph orchestration becomes more valuable for long-running, branching, cyclic, persistent systems.
+
 ## Course progress
 
 - Current module: Module 03 — AI Agents
-- Current lesson: Lesson 10 — Build a Real Agent from Scratch in Python
-- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries; Lesson 7 — Stopping Conditions and Budgets; Lesson 8 — Human-in-the-Loop; Lesson 9 — Deterministic Workflows vs Agents
-- Next: Work through the Lesson 10 integrated-agent notebook, inspect the host/model boundaries, run the deterministic tests, exercise approval resume/denial and budget stops, then move to Lesson 11 — Compare Agent Frameworks.
+- Current lesson: Lesson 11 — Compare Agent Frameworks
+- Completed: Lesson 1 — What is an AI Agent?; Lesson 2 — Tool Calling from Scratch in Python; Lesson 3 — The Agent Loop; Lesson 4 — State and Memory; Lesson 5 — Planning; Lesson 6 — Error Handling and Retries; Lesson 7 — Stopping Conditions and Budgets; Lesson 8 — Human-in-the-Loop; Lesson 9 — Deterministic Workflows vs Agents; Lesson 10 — Build a Real Agent from Scratch in Python
+- Next: Work through the Lesson 11 LangGraph comparison, map framework primitives back to the first-principles implementation, then complete Module 03 and move to Module 04 — Agentic Systems.
 
 Keep this section small and update it when a lesson is genuinely completed. It is a continuity marker, not a project-management system.
 
