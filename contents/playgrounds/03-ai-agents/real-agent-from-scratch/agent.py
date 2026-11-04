@@ -120,6 +120,14 @@ def retry_call(
             if attempt == attempts:
                 raise TransientToolError(str(exc)) from exc
             sleep(min(0.25 * (2 ** (attempt - 1)), 1.0))
+        except requests.HTTPError as exc:
+            status = exc.response.status_code if exc.response is not None else None
+            retryable = status == 429 or (status is not None and 500 <= status < 600)
+            if not retryable:
+                raise
+            if attempt == attempts:
+                raise TransientToolError(f"HTTP {status}") from exc
+            sleep(min(0.25 * (2 ** (attempt - 1)), 1.0))
     raise AssertionError("unreachable")
 
 
@@ -513,7 +521,14 @@ def resume_after_approval(
     if action_fingerprint(proposal.tool, proposal.arguments) != proposal.fingerprint:
         raise PermissionError("Proposal changed after approval request")
 
+    effective_budget = budget or RunBudget()
     if approved:
+        if state.usage.tool_calls >= effective_budget.max_tool_calls:
+            return AgentResult(
+                RunStatus.STOPPED,
+                StopReason.TOOL_BUDGET,
+                state,
+            )
         state.usage.tool_calls += 1
         data = tool.handler(**proposal.arguments)
         observation = {"ok": True, "data": data, "approved": True}
@@ -540,7 +555,7 @@ def resume_after_approval(
 
     return run_agent(
         state.goal,
-        budget=budget or RunBudget(),
+        budget=effective_budget,
         client=client,
         model=model,
         state=state,
