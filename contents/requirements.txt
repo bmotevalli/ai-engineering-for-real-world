@@ -22,3 +22,6 @@ ipykernel>=6.29.0
 
 # Testing for playground host logic
 pytest>=8.0.0
+
+# Agent orchestration framework comparison (Module 03 Lesson 11)
+langgraph>=1.2,<2
